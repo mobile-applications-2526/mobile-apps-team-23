@@ -4,6 +4,7 @@ import Auth from "../components/Auth";
 import Account from "../components/Account";
 import { View } from "react-native";
 import { Session } from "@supabase/supabase-js";
+import MapScreen from "../components/Map";
 
 export default function Index() {
   const [session, setSession] = useState<Session | null>(null);
@@ -19,12 +20,13 @@ export default function Index() {
   }, []);
 
   return (
-    <View>
-      {session && session.user ? (
-        <Account key={session.user.id} session={session} />
-      ) : (
-        <Auth />
-      )}
-    </View>
+    // <View>
+    //   {session && session.user ? (
+    //     <Account key={session.user.id} session={session} />
+    //   ) : (
+    //     <Auth />
+    //   )}
+    // </View>
+    <MapScreen />
   );
 }

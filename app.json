@@ -1,9 +1,18 @@
 {
   "expo": {
-    "name": "mobile-app",
-    "slug": "mobile-app",
+    "name": "Tracking-socials-app",
+    "slug": "Tracking-socials-app",
     "version": "1.0.0",
     "orientation": "portrait",
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "We tonen je locatie op de kaart"
+      }
+    },
+    "android": {
+      "permissions": ["ACCESS_FINE_LOCATION"]
+    },
     "icon": "./assets/images/icon.png",
     "scheme": "mobileapp",
     "userInterfaceStyle": "automatic",
