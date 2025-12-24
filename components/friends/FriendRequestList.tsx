@@ -18,7 +18,7 @@ export default function FriendRequestList({
       const res = await FriendService.getMyInvitations();
       return res ?? [];
     },
-    { refreshInterval: 60000 },
+    { refreshInterval: 10000 },
   );
 
   const acceptRequest = async (friendId: number) => {
@@ -33,7 +33,7 @@ export default function FriendRequestList({
   };
 
   return (
-    <View>
+    <View style={style}>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>Friend Requests</Text>
       {requests.map((request) => (
         <View

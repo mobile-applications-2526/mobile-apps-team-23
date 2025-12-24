@@ -12,6 +12,7 @@ export default function FriendList({
   const { data: friends = [] } = useSWR<userinfo[]>(
     "myFriends",
     FriendService.getMyFriends,
+    { refreshInterval: 10000 },
   );
 
   const onFriendRemove = async (friendId: string) => {
