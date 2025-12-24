@@ -22,14 +22,22 @@ export default function FriendRequestList({
   );
 
   const acceptRequest = async (friendId: number) => {
-    await FriendService.acceptRequest(friendId);
-    await mutate("myFriendRequests");
-    await mutate("myFriends");
+    try {
+      await FriendService.acceptRequest(friendId);
+      await mutate("myFriendRequests");
+      await mutate("myFriends");
+    } catch (error) {
+      console.error("Error accepting friend request:", error);
+    }
   };
 
   const declineRequest = async (friendId: number) => {
-    await FriendService.declineRequest(friendId);
-    await mutate("myFriendRequests");
+    try {
+      await FriendService.declineRequest(friendId);
+      await mutate("myFriendRequests");
+    } catch (error) {
+      console.error("Error declining friend request:", error);
+    }
   };
 
   return (

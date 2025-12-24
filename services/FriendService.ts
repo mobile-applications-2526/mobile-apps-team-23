@@ -102,6 +102,12 @@ const sendFriendRequest = async (inputCode: string) => {
 };
 
 const declineRequest = async (requestId: number) => {
+  // Check if the user is authenticated
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
   // Check if a request with the given ID exists
   const { data: existingRequest } = await supabase
     .from("friendship")
@@ -129,6 +135,12 @@ const declineRequest = async (requestId: number) => {
 };
 
 const acceptRequest = async (requestId: number) => {
+  // Check if the user is authenticated
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
   // Check if a request with the given ID exists
   const { data: existingRequest } = await supabase
     .from("friendship")
