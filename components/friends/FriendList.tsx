@@ -16,8 +16,12 @@ export default function FriendList({
   );
 
   const onFriendRemove = async (friendId: string) => {
-    await FriendService.removeFriend(friendId);
-    await mutate("myFriends");
+    try {
+      await FriendService.removeFriend(friendId);
+      await mutate("myFriends");
+    } catch (error) {
+      console.error("Error removing friend:", error);
+    }
   };
 
   return (
