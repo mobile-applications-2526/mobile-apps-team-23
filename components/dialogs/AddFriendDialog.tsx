@@ -20,7 +20,7 @@ export default function AddFriendDialog({
   style?: StyleProp<ViewStyle>;
 }) {
   const [ownCode, setOwnCode] = useState<string | undefined>(undefined);
-  const [email, setEmail] = useState<string | null>(null);
+  const [friendCode, setFriendCode] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function AddFriendDialog({
   }, []);
 
   const onSendRequest = () => {
-    FriendService.sendFriendRequest(email!)
+    FriendService.sendFriendRequest(friendCode!)
       .then(() => {
         setStatus("Friend request sent!");
       })
@@ -46,7 +46,7 @@ export default function AddFriendDialog({
       animationType="fade"
       statusBarTranslucent
       onRequestClose={() => {
-        setEmail("");
+        setFriendCode("");
         setStatus("");
         onClose();
       }}
@@ -76,7 +76,7 @@ export default function AddFriendDialog({
           <Text style={{ fontSize: 16, marginBottom: 12, fontWeight: "bold" }}>
             Add new friend
           </Text>
-          <Input placeholder="Friend's code" onChangeText={setEmail} />
+          <Input placeholder="Friend's code" onChangeText={setFriendCode} />
           {status && (
             <Text
               style={{ marginBottom: 12, fontStyle: "italic", color: "gray" }}
