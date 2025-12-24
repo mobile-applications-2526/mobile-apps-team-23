@@ -10,7 +10,6 @@ import { Button, Input } from "@rneui/themed";
 import { useEffect, useState } from "react";
 import FriendService from "@/services/FriendService";
 import UserService from "@/services/UserService";
-import { mutate } from "swr";
 
 export default function AddFriendDialog({
   open,
@@ -46,7 +45,11 @@ export default function AddFriendDialog({
       transparent
       animationType="fade"
       statusBarTranslucent
-      onRequestClose={onClose}
+      onRequestClose={() => {
+        setEmail("");
+        setStatus("");
+        onClose();
+      }}
     >
       <KeyboardAvoidingView
         style={{
