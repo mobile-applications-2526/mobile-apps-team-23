@@ -10,7 +10,7 @@ export type userinfo = {
 
 export type friendship = {
   id?: number;
-  user_id: string;
-  friend_id: string;
+  user_id?: string;
+  friend_id?: string;
   accepted?: boolean;
 };
