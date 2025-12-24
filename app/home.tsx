@@ -33,7 +33,7 @@ export default function Home() {
     if (initialized && !session) {
       router.replace("/");
     }
-  }, [session, initialized]);
+  }, [session, initialized, router]);
 
   if (!initialized || !session) return null;
 

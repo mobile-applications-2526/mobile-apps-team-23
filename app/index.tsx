@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/utils/supabase";
 import { View } from "react-native";
 import { Session } from "@supabase/supabase-js";
-import {useRouter} from "expo-router";
+import { useRouter } from "expo-router";
 import Auth from "@/components/Auth";
 
 export default function Index() {
@@ -16,7 +16,9 @@ export default function Index() {
       setInitialized(true); // Now we know the truth
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       setInitialized(true);
     });
@@ -26,9 +28,9 @@ export default function Index() {
 
   useEffect(() => {
     if (initialized && session) {
-      router.replace('/home');
+      router.replace("/home");
     }
-  }, [session, initialized]);
+  }, [session, initialized, router]);
 
   if (!initialized) return null;
 
@@ -38,4 +40,3 @@ export default function Index() {
     </View>
   );
 }
-
