@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Session } from "@supabase/supabase-js";
 import { supabase } from "@/utils/supabase";
-import { View } from "react-native";
+import { ScrollView, View } from "react-native";
 import { useRouter } from "expo-router";
 import LogoutButton from "@/components/LogoutButton";
 import FriendRequestList from "@/components/friends/FriendRequestList";
@@ -38,11 +38,19 @@ export default function Home() {
   if (!initialized || !session) return null;
 
   return (
-    <View style={{ padding: 12 }}>
-      <FriendList />
-      <FriendRequestList style={{ marginTop: 12 }} />
-      <AddFriendButton style={{ marginTop: 12 }} />
-      <LogoutButton style={{ marginTop: 24 }} />
+    <View style={{ padding: 12, height: "100%" }}>
+      <ScrollView>
+        <FriendList />
+        <FriendRequestList style={{ marginTop: 12 }} />
+        <View style={{ flexDirection: "row", marginTop: 12 }}>
+          <View style={{ flex: 1, marginRight: 12 }}>
+            <AddFriendButton />
+          </View>
+          <View style={{ flex: 1 }}>
+            <LogoutButton />
+          </View>
+        </View>
+      </ScrollView>
     </View>
   );
 }
