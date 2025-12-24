@@ -102,7 +102,6 @@ const sendFriendRequest = async (inputCode: string) => {
 };
 
 const declineRequest = async (requestId: number) => {
-  // Check if the user is authenticated
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -135,7 +134,6 @@ const declineRequest = async (requestId: number) => {
 };
 
 const acceptRequest = async (requestId: number) => {
-  // Check if the user is authenticated
   const {
     data: { user },
   } = await supabase.auth.getUser();
