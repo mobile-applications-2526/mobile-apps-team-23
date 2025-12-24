@@ -20,7 +20,9 @@ const getMyFriends = async (): Promise<userinfo[]> => {
     .eq("accepted", true);
 
   if (error) {
-    throw new Error("Failed to fetch friends");
+    throw new Error(
+      `Failed to fetch friends: ${error.message || JSON.stringify(error)}`,
+    );
   }
 
   // Check which side the user is on and return the other side as friend
