@@ -30,6 +30,11 @@ export default function AddFriendDialog({
   }, []);
 
   const onSendRequest = () => {
+    if (!friendCode || friendCode.trim() === "") {
+      setStatus("Please enter a friend code.");
+      return;
+    }
+
     FriendService.sendFriendRequest(friendCode!)
       .then(() => {
         setStatus("Friend request sent!");
