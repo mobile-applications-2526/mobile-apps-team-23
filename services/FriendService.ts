@@ -99,7 +99,7 @@ const sendFriendRequest = async (inputCode: string) => {
   });
 
   if (inviteError) {
-    throw new Error("Request already exists!");
+    throw new Error(inviteError.message || "Failed to send friend request");
   }
 };
 
