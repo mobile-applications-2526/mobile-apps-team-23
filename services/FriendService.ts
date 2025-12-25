@@ -37,7 +37,7 @@ const getMyFriends = async (): Promise<userinfo[]> => {
   });
 };
 
-const getMyInvitations = async (): Promise<
+const getMyFriendRequests = async (): Promise<
   (friendship & { userinfo: userinfo })[] | null
 > => {
   const {
@@ -204,7 +204,7 @@ const removeFriend = async (friendId: string) => {
 
 const FriendService = {
   getMyFriends,
-  getMyInvitations,
+  getMyFriendRequests,
   sendFriendRequest,
   declineRequest,
   acceptRequest,

@@ -15,7 +15,7 @@ export default function FriendRequestList({
   >(
     "myFriendRequests",
     async () => {
-      const res = await FriendService.getMyInvitations();
+      const res = await FriendService.getMyFriendRequests();
       return res ?? [];
     },
     { refreshInterval: 10000 },
