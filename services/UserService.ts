@@ -14,7 +14,8 @@ const getOwnUserinfo = async (): Promise<userinfo> => {
     .single();
 
   if (error) {
-    throw new Error("Failed to fetch user info");
+    const message = `Failed to fetch user info: ${error.message || "Unknown Supabase error"}`;
+    throw new Error(message);
   }
 
   return data;
