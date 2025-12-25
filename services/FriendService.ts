@@ -26,15 +26,29 @@ const getMyFriends = async (): Promise<userinfo[]> => {
   }
 
   // Check which side the user is on and return the other side as friend
-  return data?.map((friendship) => {
-    const senderRaw = (friendship as any).sender;
-    const receiverRaw = (friendship as any).receiver;
+  return data?.map(
+    (friendship: {
+      accepted: boolean;
+      sender: { id: string; name: string } | { id: string; name: string }[];
+      receiver: { id: string; name: string } | { id: string; name: string }[];
+    }): userinfo => {
+      const senderRaw:
+        | { id: string; name: string }
+        | { id: string; name: string }[] = (friendship as any).sender;
+      const receiverRaw:
+        | { id: string; name: string }
+        | { id: string; name: string }[] = (friendship as any).receiver;
 
-    const sender = Array.isArray(senderRaw) ? senderRaw[0] : senderRaw;
-    const receiver = Array.isArray(receiverRaw) ? receiverRaw[0] : receiverRaw;
+      const sender: userinfo = Array.isArray(senderRaw)
+        ? senderRaw[0]
+        : senderRaw;
+      const receiver: userinfo = Array.isArray(receiverRaw)
+        ? receiverRaw[0]
+        : receiverRaw;
 
-    return sender?.id === user.id ? receiver : sender;
-  });
+      return sender?.id === user.id ? receiver : sender;
+    },
+  );
 };
 
 const getMyFriendRequests = async (): Promise<
