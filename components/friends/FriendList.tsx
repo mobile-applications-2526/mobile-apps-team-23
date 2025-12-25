@@ -3,10 +3,13 @@ import FriendService from "@/services/FriendService";
 import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { Button } from "@rneui/themed";
 import { userinfo } from "@/types/models";
+import { Router } from "expo-router";
 
 export default function FriendList({
+  router,
   style,
 }: {
+  router: Router;
   style?: StyleProp<ViewStyle>;
 }) {
   const { data: friends = [] } = useSWR<userinfo[]>(
@@ -14,6 +17,10 @@ export default function FriendList({
     FriendService.getMyFriends,
     { refreshInterval: 10000 },
   );
+
+  const onFriendMessage = (friendId: string) => {
+    router.push(`/privateMessages?friendId=${friendId}`);
+  };
 
   const onFriendRemove = async (friendId: string) => {
     try {
@@ -45,7 +52,11 @@ export default function FriendList({
             {friend.name}
           </Text>
           <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-            <Button title="Message" containerStyle={{ minWidth: 90 }} />
+            <Button
+              title="Message"
+              containerStyle={{ minWidth: 90 }}
+              onPress={() => onFriendMessage(friend.id!)}
+            />
             <Button
               title="Remove Friend"
               containerStyle={{ minWidth: 90, marginLeft: 8 }}
