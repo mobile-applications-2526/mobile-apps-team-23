@@ -40,6 +40,11 @@ const getMyFriends = async (): Promise<userinfo[]> => {
 const getMyInvitations = async (): Promise<
   (friendship & { userinfo: userinfo })[] | null
 > => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
   const { data } = await supabase
     .from("friendship")
     .select("*, userinfo!user_id(name)")
