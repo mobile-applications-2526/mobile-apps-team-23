@@ -25,30 +25,20 @@ const getMyFriends = async (): Promise<userinfo[]> => {
     );
   }
 
+  type FriendRow = {
+    accepted: boolean;
+    sender: userinfo | userinfo[];
+    receiver: userinfo | userinfo[];
+  };
+
   // Check which side the user is on and return the other side as friend
-  return data?.map(
-    (friendship: {
-      accepted: boolean;
-      sender: { id: string; name: string } | { id: string; name: string }[];
-      receiver: { id: string; name: string } | { id: string; name: string }[];
-    }): userinfo => {
-      const senderRaw:
-        | { id: string; name: string }
-        | { id: string; name: string }[] = (friendship as any).sender;
-      const receiverRaw:
-        | { id: string; name: string }
-        | { id: string; name: string }[] = (friendship as any).receiver;
-
-      const sender: userinfo = Array.isArray(senderRaw)
-        ? senderRaw[0]
-        : senderRaw;
-      const receiver: userinfo = Array.isArray(receiverRaw)
-        ? receiverRaw[0]
-        : receiverRaw;
-
-      return sender?.id === user.id ? receiver : sender;
-    },
-  );
+  return (data as FriendRow[])?.map((row) => {
+    const sender = Array.isArray(row.sender) ? row.sender[0] : row.sender;
+    const receiver = Array.isArray(row.receiver)
+      ? row.receiver[0]
+      : row.receiver;
+    return sender.id === user.id ? receiver : sender;
+  });
 };
 
 const getMyFriendRequests = async (): Promise<
