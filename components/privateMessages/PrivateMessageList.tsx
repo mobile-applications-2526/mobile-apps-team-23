@@ -45,7 +45,12 @@ export default function PrivateMessageList({
 
   useEffect(() => {
     if (friendId) {
-      UserService.getUserinfoById(friendId).then(setFriend);
+      UserService.getUserinfoById(friendId)
+        .then(setFriend)
+        .catch((error) => {
+          console.error("Failed to fetch friend information:", error);
+          Alert.alert("Error", "Failed to load friend information.");
+        });
     }
   }, [friendId]);
 
