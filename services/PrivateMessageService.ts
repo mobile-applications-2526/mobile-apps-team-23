@@ -83,7 +83,7 @@ const deletePrivateMessage = async (messageId: number) => {
   } = await supabase.auth.getUser();
   if (!user) throw new Error("User not authenticated");
 
-  const { data, error } = await supabase
+  const { error } = await supabase
     .from("privatemessage")
     .delete()
     .eq("id", messageId);
