@@ -4,24 +4,19 @@ import { useState } from "react";
 import PrivateMessageService from "@/services/PrivateMessageService";
 import { mutate } from "swr";
 
-export default function PrivateMessageSendBox({
-  friendId,
+export default function BaseBox({
+  onButtonPress,
+  content,
+  setContent,
+  iconName,
+  autoFocus = false,
 }: {
-  friendId: string | undefined;
+  onButtonPress: () => void;
+  content: string;
+  setContent: (content: string) => void;
+  iconName?: string;
+  autoFocus?: boolean;
 }) {
-  const [content, setContent] = useState("");
-
-  const onMessageSend = () => {
-    PrivateMessageService.sendPrivateMessage(friendId!, content)
-      .then(() => {
-        setContent("");
-        mutate("privateMessages_" + friendId);
-      })
-      .catch((err) => {
-        console.error("Failed to send message:", err);
-      });
-  };
-
   return (
     <View
       style={{
@@ -47,17 +42,18 @@ export default function PrivateMessageSendBox({
         }}
         value={content}
         onChangeText={setContent}
+        autoFocus={autoFocus}
       />
       <Button
         type="clear"
         icon={{
-          name: "send",
+          name: iconName ?? "send",
           type: "font-awesome",
           size: 20,
           color: "#2089dc",
         }}
         containerStyle={{ marginLeft: 8, marginBottom: 4 }}
-        onPress={onMessageSend}
+        onPress={onButtonPress}
       />
     </View>
   );

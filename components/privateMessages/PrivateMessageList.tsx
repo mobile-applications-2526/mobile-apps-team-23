@@ -15,8 +15,10 @@ import PrivateMessageService from "@/services/PrivateMessageService";
 
 export default function PrivateMessageList({
   friendId,
+  setEditingMessage,
 }: {
   friendId: string | undefined;
+  setEditingMessage: (message: privateMessage | null) => void;
 }) {
   const [ownUserinfo, setOwnUserinfo] = useState<userinfo | null>(null);
   const [friend, setFriend] = useState<userinfo | null>(null);
@@ -57,6 +59,12 @@ export default function PrivateMessageList({
               style: "destructive",
               onPress: () => {
                 PrivateMessageService.deletePrivateMessage(item.id!);
+              },
+            },
+            {
+              text: "Edit Message",
+              onPress: () => {
+                setEditingMessage(item);
               },
             },
             {
@@ -165,7 +173,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginVertical: 4,
     borderRadius: 6,
-    maxWidth: "80%", // Don't let bubbles go full width
   },
   receivedBubble: { alignSelf: "flex-start", backgroundColor: "#ffffff" },
   sentBubble: { alignSelf: "flex-end", backgroundColor: "#0b93f6" },

@@ -59,6 +59,10 @@ const editPrivateMessage = async (messageId: number, newContent: string) => {
   } = await supabase.auth.getUser();
   if (!user) throw new Error("User not authenticated");
 
+  if (!newContent || newContent.trim() === "") {
+    throw new Error("Message content cannot be empty");
+  }
+
   const { data, error } = await supabase
     .from("privatemessage")
     .update({ content: newContent })

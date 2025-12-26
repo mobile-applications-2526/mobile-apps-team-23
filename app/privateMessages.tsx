@@ -1,17 +1,18 @@
 import { useLocalSearchParams } from "expo-router";
 import { useAuth } from "@/hooks/useAuth";
 import PrivateMessageList from "@/components/privateMessages/PrivateMessageList";
-import PrivateMessageSendBox from "@/components/privateMessages/PrivateMessageSendBox";
-import {
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-} from "react-native";
+import { KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
+import { useState } from "react";
+import SendBox from "@/components/privateMessages/InputBoxes/SendBox";
+import EditBox from "@/components/privateMessages/InputBoxes/EditBox";
+import { privateMessage } from "@/types/models";
 
 export default function PrivateMessages() {
   const searchParams = useLocalSearchParams();
   const friendId = (searchParams?.friendId as string | undefined) ?? undefined;
+  const [editingMessage, setEditingMessage] = useState<privateMessage | null>(
+    null,
+  );
 
   useAuth();
 
@@ -24,8 +25,17 @@ export default function PrivateMessages() {
         // Offset might be needed if you have a header (approx 60-100)
         keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
       >
-        <PrivateMessageList friendId={friendId} />
-        <PrivateMessageSendBox friendId={friendId} />
+        <PrivateMessageList
+          friendId={friendId}
+          setEditingMessage={setEditingMessage}
+        />
+        {!editingMessage?.id && <SendBox friendId={friendId} />}
+        {editingMessage?.id && (
+          <EditBox
+            editingMessage={editingMessage}
+            setEditingMessage={setEditingMessage}
+          />
+        )}
       </KeyboardAvoidingView>
     </SafeAreaView>
   );
