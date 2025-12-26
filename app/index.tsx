@@ -4,6 +4,7 @@ import { View } from "react-native";
 import { Session } from "@supabase/supabase-js";
 import { useRouter } from "expo-router";
 import Auth from "@/components/Auth";
+import MapScreen from "../components/Map";
 
 export default function Index() {
   const [session, setSession] = useState<Session | null>(null);
@@ -35,8 +36,11 @@ export default function Index() {
   if (!initialized) return null;
 
   return (
-    <View>
-      <Auth />
-    </View>
+    <>
+      <View>
+        <Auth />
+      </View>
+      <MapScreen />
+    </>
   );
 }
