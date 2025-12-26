@@ -1,5 +1,5 @@
 import { supabase } from "@/utils/supabase";
-import { privateMessage } from "@/types/models";
+import { PrivateMessage } from "@/types/models";
 
 const getPrivateMessages = async (friendId: string) => {
   const {
@@ -34,7 +34,7 @@ const sendPrivateMessage = async (recipientId: string, content: string) => {
     throw new Error("Message content cannot be empty");
   }
 
-  const message: privateMessage = {
+  const message: PrivateMessage = {
     sender_id: user.id,
     receiver_id: recipientId,
     content,

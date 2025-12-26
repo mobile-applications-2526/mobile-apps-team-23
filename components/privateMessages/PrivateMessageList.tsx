@@ -6,7 +6,7 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-import { privateMessage, userinfo } from "@/types/models";
+import { PrivateMessage, Userinfo } from "@/types/models";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { useChatMessages } from "@/hooks/usePrivateChatMessages";
@@ -18,10 +18,10 @@ export default function PrivateMessageList({
   setEditingMessage,
 }: {
   friendId: string | undefined;
-  setEditingMessage: (message: privateMessage | null) => void;
+  setEditingMessage: (message: PrivateMessage | null) => void;
 }) {
-  const [ownUserinfo, setOwnUserinfo] = useState<userinfo | null>(null);
-  const [friend, setFriend] = useState<userinfo | null>(null);
+  const [ownUserinfo, setOwnUserinfo] = useState<Userinfo | null>(null);
+  const [friend, setFriend] = useState<Userinfo | null>(null);
   const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function PrivateMessageList({
   }, [friendId]);
 
   // Render a single message item
-  const renderItem = ({ item }: { item: privateMessage }) => {
+  const renderItem = ({ item }: { item: PrivateMessage }) => {
     const senderId = (item as any).senderId ?? (item as any).sender_id ?? "";
     const isReceived = senderId === friendId;
 

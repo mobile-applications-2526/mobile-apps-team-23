@@ -2,7 +2,7 @@ import useSWR, { mutate } from "swr";
 import FriendService from "@/services/FriendService";
 import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { Button } from "@rneui/themed";
-import { userinfo } from "@/types/models";
+import { Userinfo } from "@/types/models";
 import { Router } from "expo-router";
 
 export default function FriendList({
@@ -12,7 +12,7 @@ export default function FriendList({
   router: Router;
   style?: StyleProp<ViewStyle>;
 }) {
-  const { data: friends = [] } = useSWR<userinfo[]>(
+  const { data: friends = [] } = useSWR<Userinfo[]>(
     "myFriends",
     FriendService.getMyFriends,
     { refreshInterval: 10000 },

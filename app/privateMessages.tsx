@@ -5,12 +5,12 @@ import { KeyboardAvoidingView, Platform, SafeAreaView } from "react-native";
 import { useState } from "react";
 import SendBox from "@/components/privateMessages/InputBoxes/SendBox";
 import EditBox from "@/components/privateMessages/InputBoxes/EditBox";
-import { privateMessage } from "@/types/models";
+import { PrivateMessage } from "@/types/models";
 
 export default function PrivateMessages() {
   const searchParams = useLocalSearchParams();
   const friendId = (searchParams?.friendId as string | undefined) ?? undefined;
-  const [editingMessage, setEditingMessage] = useState<privateMessage | null>(
+  const [editingMessage, setEditingMessage] = useState<PrivateMessage | null>(
     null,
   );
 

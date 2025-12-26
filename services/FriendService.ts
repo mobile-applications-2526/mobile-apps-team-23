@@ -1,7 +1,7 @@
 import { supabase } from "@/utils/supabase";
-import { friendship, userinfo } from "@/types/models";
+import { Friendship, Userinfo } from "@/types/models";
 
-const getMyFriends = async (): Promise<userinfo[]> => {
+const getMyFriends = async (): Promise<Userinfo[]> => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -27,8 +27,8 @@ const getMyFriends = async (): Promise<userinfo[]> => {
 
   type FriendRow = {
     accepted: boolean;
-    sender: userinfo | userinfo[];
-    receiver: userinfo | userinfo[];
+    sender: Userinfo | Userinfo[];
+    receiver: Userinfo | Userinfo[];
   };
 
   // Check which side the user is on and return the other side as friend
@@ -42,7 +42,7 @@ const getMyFriends = async (): Promise<userinfo[]> => {
 };
 
 const getMyFriendRequests = async (): Promise<
-  (friendship & { userinfo: userinfo })[] | null
+  (Friendship & { userinfo: Userinfo })[] | null
 > => {
   const {
     data: { user },

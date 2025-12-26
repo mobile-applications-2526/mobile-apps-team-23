@@ -1,5 +1,5 @@
 import BaseBox from "@/components/privateMessages/InputBoxes/BaseBox";
-import { privateMessage } from "@/types/models";
+import { PrivateMessage } from "@/types/models";
 import PrivateMessageService from "@/services/PrivateMessageService";
 import { useState } from "react";
 
@@ -7,7 +7,7 @@ export default function EditBox({
   editingMessage,
   setEditingMessage,
 }: {
-  editingMessage: privateMessage;
+  editingMessage: PrivateMessage;
   setEditingMessage: (message: null) => void;
 }) {
   const [content, setContent] = useState(editingMessage.content ?? "");

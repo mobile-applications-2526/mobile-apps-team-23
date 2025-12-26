@@ -1,7 +1,7 @@
 import { supabase } from "@/utils/supabase";
-import { userinfo } from "@/types/models";
+import { Userinfo } from "@/types/models";
 
-const getOwnUserinfo = async (): Promise<userinfo> => {
+const getOwnUserinfo = async (): Promise<Userinfo> => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -21,7 +21,7 @@ const getOwnUserinfo = async (): Promise<userinfo> => {
   return data;
 };
 
-const getUserinfoById = async (userId: string): Promise<userinfo> => {
+const getUserinfoById = async (userId: string): Promise<Userinfo> => {
   const {
     data: { user },
   } = await supabase.auth.getUser();
