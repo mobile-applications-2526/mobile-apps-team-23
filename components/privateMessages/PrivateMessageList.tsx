@@ -1,8 +1,17 @@
-import { Text, View, FlatList, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+  Pressable,
+  Alert,
+} from "react-native";
 import { privateMessage, userinfo } from "@/types/models";
 import { useEffect, useState, useRef } from "react";
 import UserService from "@/services/UserService";
 import { useChatMessages } from "@/hooks/usePrivateChatMessages";
+import * as Haptics from "expo-haptics";
+import PrivateMessageService from "@/services/PrivateMessageService";
 
 export default function PrivateMessageList({
   friendId,
@@ -35,11 +44,39 @@ export default function PrivateMessageList({
     const senderId = (item as any).senderId ?? (item as any).sender_id ?? "";
     const isReceived = senderId === friendId;
 
+    const handleLongPress = async () => {
+      if (!isReceived) {
+        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+
+        Alert.alert(
+          "Message Options",
+          undefined,
+          [
+            {
+              text: "Delete Message",
+              style: "destructive",
+              onPress: () => {
+                PrivateMessageService.deletePrivateMessage(item.id!);
+              },
+            },
+            {
+              text: "Cancel",
+              style: "cancel",
+            },
+          ],
+          { cancelable: true },
+        );
+      }
+    };
+
     return (
-      <View
-        style={[
+      <Pressable
+        onLongPress={handleLongPress}
+        delayLongPress={300} // Speed up the response for a "haptic" feel
+        style={({ pressed }) => [
           styles.messageBubble,
           isReceived ? styles.receivedBubble : styles.sentBubble,
+          pressed && { opacity: 0.8 }, // Visual feedback while holding
         ]}
       >
         <Text
@@ -64,15 +101,31 @@ export default function PrivateMessageList({
         >
           {item.content}
         </Text>
-        <Text
-          style={[
-            styles.timestamp,
-            { color: isReceived ? "#888" : "rgba(255,255,255,0.8)" },
-          ]}
-        >
-          {new Date(item.created_at!).toLocaleString()}
-        </Text>
-      </View>
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <Text
+            style={[
+              styles.timestamp,
+              { color: isReceived ? "#888" : "rgba(255,255,255,0.8)" },
+            ]}
+          >
+            {new Date(item.created_at!).toLocaleString()}
+          </Text>
+          {item.edited && (
+            <Text
+              style={[
+                styles.timestamp,
+                {
+                  fontStyle: "italic",
+                  marginLeft: 4,
+                  color: isReceived ? "#888" : "rgba(255,255,255,0.8)",
+                },
+              ]}
+            >
+              (edited)
+            </Text>
+          )}
+        </View>
+      </Pressable>
     );
   };
 

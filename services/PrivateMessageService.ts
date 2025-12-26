@@ -53,9 +53,49 @@ const sendPrivateMessage = async (recipientId: string, content: string) => {
   return data;
 };
 
+const editPrivateMessage = async (messageId: number, newContent: string) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
+  const { data, error } = await supabase
+    .from("privatemessage")
+    .update({ content: newContent })
+    .eq("id", messageId);
+
+  if (error) {
+    throw new Error(
+      `Failed to edit private message: ${error.message || JSON.stringify(error)}`,
+    );
+  }
+
+  return data;
+};
+
+const deletePrivateMessage = async (messageId: number) => {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error("User not authenticated");
+
+  const { data, error } = await supabase
+    .from("privatemessage")
+    .delete()
+    .eq("id", messageId);
+
+  if (error) {
+    throw new Error(
+      `Failed to delete private message: ${error.message || JSON.stringify(error)}`,
+    );
+  }
+};
+
 const PrivateMessageService = {
   getPrivateMessages,
   sendPrivateMessage,
+  editPrivateMessage,
+  deletePrivateMessage,
 };
 
 export default PrivateMessageService;

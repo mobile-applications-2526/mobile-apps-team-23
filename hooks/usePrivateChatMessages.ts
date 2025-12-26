@@ -17,29 +17,58 @@ export function useChatMessages(friendId: string, currentUserId: string) {
 
     fetchHistory();
 
-    const insertChannelName = `private-messages-insert-${currentUserId}_${friendId}`;
-    const insertChannel = supabase
-      .channel(insertChannelName)
+    const checkValidity = (message: privateMessage) => {
+      return (
+        (message.sender_id == currentUserId &&
+          message.receiver_id == friendId) ||
+        (message.sender_id == friendId && message.receiver_id == currentUserId)
+      );
+    };
+
+    const channelName = `private-messages-${currentUserId}_${friendId}`;
+    const channel = supabase
+      .channel(channelName)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "privatemessage" },
         (payload) => {
           const newMessage = payload.new as privateMessage;
 
-          if (
-            (newMessage.sender_id == currentUserId &&
-              newMessage.receiver_id == friendId) ||
-            (newMessage.sender_id == friendId &&
-              newMessage.receiver_id == currentUserId)
-          ) {
+          if (checkValidity(newMessage)) {
             setMessages((prevMessages) => [...prevMessages, newMessage]);
           }
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "privatemessage" },
+        (payload) => {
+          const updatedMessage = payload.new as privateMessage;
+
+          if (checkValidity(updatedMessage)) {
+            setMessages((prev) =>
+              prev.map((msg) =>
+                msg.id === payload.new.id
+                  ? (payload.new as privateMessage)
+                  : msg,
+              ),
+            );
+          }
+        },
+      )
+      .on(
+        "postgres_changes",
+        { event: "DELETE", schema: "public", table: "privatemessage" },
+        (payload) => {
+          setMessages((prev) =>
+            prev.filter((msg) => msg.id !== payload.old.id),
+          );
         },
       )
       .subscribe();
 
     return () => {
-      supabase.removeChannel(insertChannel);
+      supabase.removeChannel(channel);
     };
   }, [friendId, currentUserId]);
 

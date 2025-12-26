@@ -31,6 +31,8 @@ export default function PrivateMessageSendBox({
         backgroundColor: "#fff",
         borderTopWidth: 1,
         borderTopColor: "#e0e0e0",
+        marginHorizontal: 8,
+        borderRadius: 20,
       }}
     >
       <Input
@@ -41,14 +43,11 @@ export default function PrivateMessageSendBox({
         inputContainerStyle={{
           borderBottomWidth: 0,
           minHeight: 40,
-          borderRadius: 20, // Optional: Rounded corners
-          paddingHorizontal: 10, // Optional: Text padding inside bubble
-          paddingVertical: 5,
+          paddingHorizontal: 10,
         }}
         value={content}
         onChangeText={setContent}
       />
-
       <Button
         type="clear"
         icon={{
