@@ -11,8 +11,12 @@ export function useChatMessages(friendId: string, currentUserId: string) {
     if (!currentUserId) return;
 
     const fetchHistory = async () => {
-      const data = await PrivateMessageService.getPrivateMessages(friendId);
-      if (data) setMessages(data as privateMessage[]);
+      try {
+        const data = await PrivateMessageService.getPrivateMessages(friendId);
+        if (data) setMessages(data as privateMessage[]);
+      } catch (error) {
+        console.error("Failed to fetch private messages:", error);
+      }
     };
 
     fetchHistory();
