@@ -14,3 +14,11 @@ export type friendship = {
   friend_id?: string;
   accepted?: boolean;
 };
+
+export type privateMessage = {
+  id?: number;
+  created_at?: string;
+  sender_id?: string;
+  receiver_id?: string;
+  content?: string;
+};
