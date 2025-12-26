@@ -159,7 +159,7 @@ export default function PrivateMessageList({
       <FlatList
         ref={flatListRef}
         data={privateMessages}
-        keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
+        keyExtractor={(item, index) => item.id?.toString() ?? index.toString()}
         renderItem={renderItem}
         contentContainerStyle={{ paddingBottom: 20 }}
         // Auto-scroll to bottom when new messages arrive
