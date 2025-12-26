@@ -25,9 +25,17 @@ export default function PrivateMessageList({
   const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
-    UserService.getOwnUserinfo().then((data) => {
-      setOwnUserinfo(data);
-    });
+    UserService.getOwnUserinfo()
+      .then((data) => {
+        setOwnUserinfo(data);
+      })
+      .catch((error) => {
+        console.error("Failed to fetch own user info:", error);
+        Alert.alert(
+          "Error",
+          "Unable to load your user information. Some features may not work correctly.",
+        );
+      });
   }, []);
 
   const { messages: privateMessages } = useChatMessages(
