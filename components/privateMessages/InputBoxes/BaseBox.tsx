@@ -1,8 +1,5 @@
 import { View } from "react-native";
 import { Button, Input } from "@rneui/themed";
-import { useState } from "react";
-import PrivateMessageService from "@/services/PrivateMessageService";
-import { mutate } from "swr";
 
 export default function BaseBox({
   onButtonPress,
