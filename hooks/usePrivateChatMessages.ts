@@ -23,9 +23,9 @@ export function useChatMessages(friendId: string, currentUserId: string) {
 
     const checkValidity = (message: privateMessage) => {
       return (
-        (message.sender_id == currentUserId &&
-          message.receiver_id == friendId) ||
-        (message.sender_id == friendId && message.receiver_id == currentUserId)
+        (message.sender_id === currentUserId &&
+          message.receiver_id === friendId) ||
+        (message.sender_id === friendId && message.receiver_id === currentUserId)
       );
     };
 
