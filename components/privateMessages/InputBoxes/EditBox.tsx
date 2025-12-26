@@ -10,10 +10,15 @@ export default function EditBox({
   editingMessage: PrivateMessage;
   setEditingMessage: (message: null) => void;
 }) {
+  const originalContent = editingMessage.content ?? "";
   const [content, setContent] = useState(editingMessage.content ?? "");
 
-  const onButtonPress = () => {
-    if (editingMessage.id) {
+  const onEditButtonPress = () => {
+    if (
+      editingMessage.id &&
+      content.length > 0 &&
+      content !== originalContent
+    ) {
       PrivateMessageService.editPrivateMessage(
         editingMessage.id,
         content,
@@ -25,13 +30,32 @@ export default function EditBox({
     setEditingMessage(null);
   };
 
+  const onResetButtonPress = () => {
+    setContent(originalContent);
+  };
+
   return (
-    <BaseBox
-      onButtonPress={onButtonPress}
-      content={content}
-      setContent={setContent}
-      iconName="edit"
-      autoFocus
-    />
+    <>
+      <BaseBox
+        onButtonPress={
+          content.length > 0 ? onEditButtonPress : onResetButtonPress
+        }
+        content={content}
+        setContent={setContent}
+        iconName={
+          content === originalContent
+            ? "arrow-left"
+            : content.length > 0
+              ? "edit"
+              : "undo"
+        }
+        autoFocus
+        allowEmptyContent={content.length === 0}
+        defaultColor={content.length === 0 ? "#f39c12" : undefined}
+        placeholder={
+          content.length === 0 ? "Reset to original message" : undefined
+        }
+      />
+    </>
   );
 }

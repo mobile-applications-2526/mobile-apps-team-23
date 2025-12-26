@@ -25,6 +25,7 @@ export default function SendBox({
       iconName="send"
       content={content}
       setContent={setContent}
+      placeholder="Type a message to send..."
     />
   );
 }

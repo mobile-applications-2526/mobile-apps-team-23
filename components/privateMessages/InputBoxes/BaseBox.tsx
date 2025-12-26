@@ -5,20 +5,26 @@ export default function BaseBox({
   onButtonPress,
   content,
   setContent,
-  iconName,
+  iconName = "send",
   autoFocus = false,
+  allowEmptyContent = false,
+  defaultColor = "#2089dc",
+  placeholder = "Type a message...",
 }: {
   onButtonPress: () => void;
   content: string;
   setContent: (content: string) => void;
   iconName?: string;
   autoFocus?: boolean;
+  allowEmptyContent?: boolean;
+  defaultColor?: string;
+  placeholder?: string;
 }) {
   return (
     <View
       style={{
         flexDirection: "row",
-        alignItems: "flex-end", // Aligns items to the bottom
+        alignItems: "center",
         padding: 8,
         backgroundColor: "#fff",
         borderTopWidth: 1,
@@ -28,7 +34,7 @@ export default function BaseBox({
       }}
     >
       <Input
-        placeholder="Type a message..."
+        placeholder={placeholder}
         multiline={true}
         renderErrorMessage={false}
         containerStyle={{ flex: 1, paddingHorizontal: 0 }}
@@ -44,12 +50,15 @@ export default function BaseBox({
       <Button
         type="clear"
         icon={{
-          name: iconName ?? "send",
+          name: iconName,
           type: "font-awesome",
           size: 20,
-          color: "#2089dc",
+          color:
+            !allowEmptyContent && content.trim().length === 0
+              ? "#bdbdbd"
+              : defaultColor,
         }}
-        containerStyle={{ marginLeft: 8, marginBottom: 4 }}
+        disabled={!allowEmptyContent && content.trim().length === 0}
         onPress={onButtonPress}
       />
     </View>
