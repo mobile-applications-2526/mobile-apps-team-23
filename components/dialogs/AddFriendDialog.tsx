@@ -10,6 +10,7 @@ import { Button, Input } from "@rneui/themed";
 import { useEffect, useState } from "react";
 import FriendService from "@/services/FriendService";
 import UserService from "@/services/UserService";
+import * as Clipboard from "expo-clipboard";
 
 export default function AddFriendDialog({
   open,
@@ -92,6 +93,16 @@ export default function AddFriendDialog({
           {ownCode && (
             <Text
               style={{ marginBottom: 12, fontStyle: "italic", color: "gray" }}
+              onPress={() => {
+                Clipboard.setStringAsync(ownCode)
+                  .then(() => {
+                    setStatus("Code copied");
+                  })
+                  .catch(() => {
+                    setStatus("Copy failed");
+                  });
+                setTimeout(() => setStatus(null), 3000);
+              }}
             >
               Your code: {ownCode}
             </Text>

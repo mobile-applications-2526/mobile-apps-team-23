@@ -3,7 +3,7 @@ import { StyleProp, Text, View, ViewStyle } from "react-native";
 import { Button } from "@rneui/themed";
 import useSWR from "swr";
 import { mutate } from "swr";
-import { friendship, userinfo } from "@/types/models";
+import { Friendship, Userinfo } from "@/types/models";
 
 export default function FriendRequestList({
   style,
@@ -11,7 +11,7 @@ export default function FriendRequestList({
   style?: StyleProp<ViewStyle>;
 }) {
   const { data: requests = [] } = useSWR<
-    (friendship & { userinfo: userinfo })[]
+    (Friendship & { userinfo: Userinfo })[]
   >(
     "myFriendRequests",
     async () => {
