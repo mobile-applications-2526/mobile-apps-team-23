@@ -7,9 +7,9 @@ import { Router } from "expo-router";
 import PostCreateBottomsButtons from "@/components/timeline/create/PostCreateBottomButtons";
 import PostCreateImageSelect from "@/components/timeline/create/PostCreateImageSelect";
 import PostCreateTitleAndContentInputs from "@/components/timeline/create/PostCreateTitleAndContentInputs";
+import { HEADER_HEIGHT } from "@/constants/ui";
 
 export default function PostCreateContent({ router }: { router: Router }) {
-  const HEADER_HEIGHT = 90; // Adjust this value based on your header height
 
   const [isImageEnabled, setIsImageEnabled] = useState(false);
   const [title, setTitle] = useState("");

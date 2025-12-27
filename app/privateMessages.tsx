@@ -13,6 +13,7 @@ import SendBox from "@/components/privateMessages/InputBoxes/SendBox";
 import EditBox from "@/components/privateMessages/InputBoxes/EditBox";
 import { PrivateMessage } from "@/types/models";
 import UserService from "@/services/UserService";
+import { HEADER_HEIGHT } from "@/constants/ui";
 
 export default function PrivateMessages() {
   const searchParams = useLocalSearchParams();
@@ -56,8 +57,8 @@ export default function PrivateMessages() {
         style={{ flex: 1 }}
         // iOS needs "padding", Android usually works automatically or with "height"
         behavior={Platform.OS === "ios" ? "padding" : undefined}
-        // Offset might be needed if you have a header (approx 60-100)
-        keyboardVerticalOffset={Platform.OS === "ios" ? 100 : 0}
+        // Offset adjusted for navigation header and status bar
+        keyboardVerticalOffset={Platform.OS === "ios" ? HEADER_HEIGHT : 0}
       >
         <Text
           style={{
