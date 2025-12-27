@@ -54,8 +54,6 @@ const unlikePost = async (postId: number): Promise<void> => {
       `Failed to unlike post: ${error.message || JSON.stringify(error)}`,
     );
   }
-
-  return;
 };
 
 const createPost = async (post: Post) => {
