@@ -28,8 +28,8 @@ export default function HomeContent({ router }: { router: Router }) {
           containerStyle={{ flex: 1, marginRight: 6 }}
           buttonStyle={{ borderRadius: 12 }}
           icon={{
-            name: "people",
-            type: "fontawesome",
+            name: "users",
+            type: "font-awesome",
             color: isTimeline ? "#2089dc" : "#ffffff",
           }}
         />
@@ -40,8 +40,8 @@ export default function HomeContent({ router }: { router: Router }) {
           containerStyle={{ flex: 1, marginLeft: 6 }}
           buttonStyle={{ borderRadius: 12 }}
           icon={{
-            name: "comment",
-            type: "fontawesome",
+            name: "comments",
+            type: "font-awesome",
             color: isTimeline ? "#ffffff" : "#2089dc",
           }}
         />
