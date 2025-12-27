@@ -25,10 +25,28 @@ export default function PostCreateContent({ router }: { router: Router }) {
   };
 
   const onCreatePost = async () => {
+    const trimmedImageUrl = imageUrl?.trim();
+
+    if (isImageEnabled) {
+      if (!trimmedImageUrl) {
+        console.error("Image URL is required when image is enabled.");
+        return;
+      }
+
+      try {
+        // Validate that the image URL has a proper URL format
+        // This will throw if the URL is not syntactically valid
+        new URL(trimmedImageUrl);
+      } catch (e) {
+        console.error("Invalid image URL format:", e);
+        return;
+      }
+    }
+
     const post: Post = {
       title,
       description: content,
-      image_url: isImageEnabled ? imageUrl : undefined,
+      image_url: isImageEnabled ? trimmedImageUrl : undefined,
     };
 
     try {
