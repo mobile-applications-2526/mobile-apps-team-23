@@ -32,6 +32,8 @@ export default function PostCreateContent({ router }: { router: Router }) {
     try {
       const createdPost: TimelinePost = await PostsService.createPost(post);
       await PostsService.likePost(createdPost.id!);
+      // Intentionally auto-like the newly created post on behalf of the author
+      // so that it appears with an initial like in the timeline UI.
       await mutate("timelinePosts");
       router.back();
     } catch (error) {
