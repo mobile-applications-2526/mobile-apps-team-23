@@ -48,7 +48,7 @@ const sendPrivateMessage = async (recipientId: string, content: string) => {
 };
 
 const editPrivateMessage = async (messageId: number, newContent: string) => {
-  const user = await getAuth();
+  await getAuth();
 
   if (!newContent || newContent.trim() === "") {
     throw new Error("Message content cannot be empty");
@@ -69,7 +69,7 @@ const editPrivateMessage = async (messageId: number, newContent: string) => {
 };
 
 const deletePrivateMessage = async (messageId: number) => {
-  const user = await getAuth();
+  await getAuth();
 
   const { error } = await supabase
     .from("privatemessage")
