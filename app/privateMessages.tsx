@@ -11,7 +11,7 @@ import {
 import { useEffect, useState } from "react";
 import SendBox from "@/components/privateMessages/InputBoxes/SendBox";
 import EditBox from "@/components/privateMessages/InputBoxes/EditBox";
-import { PrivateMessage } from "@/types/models";
+import { PrivateMessage, Userinfo } from "@/types/models";
 import UserService from "@/services/UserService";
 import { HEADER_HEIGHT } from "@/constants/ui";
 
@@ -21,8 +21,8 @@ export default function PrivateMessages() {
   const [editingMessage, setEditingMessage] = useState<PrivateMessage | null>(
     null,
   );
-  const [ownUser, setOwnUser] = useState<any>(null);
-  const [friend, setFriend] = useState<any>(null);
+  const [ownUser, setOwnUser] = useState<Userinfo | null>(null);
+  const [friend, setFriend] = useState<Userinfo | null>(null);
 
   useAuth();
 
