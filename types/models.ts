@@ -23,3 +23,19 @@ export type PrivateMessage = {
   content?: string;
   edited?: boolean;
 };
+
+export type Post = {
+  id?: number;
+  created_at?: string;
+  creator_id?: string;
+  title?: string;
+  description?: string;
+  location?: string;
+  image_url?: string;
+};
+
+export type TimelinePost = Post & {
+  creator?: Userinfo;
+  like_count?: number;
+  is_liked_by_user?: boolean;
+};

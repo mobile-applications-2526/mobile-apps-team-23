@@ -1,11 +1,8 @@
-import { supabase } from "@/utils/supabase";
+import { getAuth, supabase } from "@/utils/supabase";
 import { PrivateMessage } from "@/types/models";
 
 const getPrivateMessages = async (friendId: string) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuth();
 
   const { data: messages, error } = await supabase
     .from("privatemessage")
@@ -25,10 +22,7 @@ const getPrivateMessages = async (friendId: string) => {
 };
 
 const sendPrivateMessage = async (recipientId: string, content: string) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuth();
 
   if (!content || content.trim() === "") {
     throw new Error("Message content cannot be empty");
@@ -54,10 +48,7 @@ const sendPrivateMessage = async (recipientId: string, content: string) => {
 };
 
 const editPrivateMessage = async (messageId: number, newContent: string) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  await getAuth();
 
   if (!newContent || newContent.trim() === "") {
     throw new Error("Message content cannot be empty");
@@ -78,10 +69,7 @@ const editPrivateMessage = async (messageId: number, newContent: string) => {
 };
 
 const deletePrivateMessage = async (messageId: number) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  await getAuth();
 
   const { error } = await supabase
     .from("privatemessage")

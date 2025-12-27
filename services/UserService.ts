@@ -1,11 +1,8 @@
-import { supabase } from "@/utils/supabase";
+import { getAuth, supabase } from "@/utils/supabase";
 import { Userinfo } from "@/types/models";
 
 const getOwnUserinfo = async (): Promise<Userinfo> => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuth();
 
   const { data, error } = await supabase
     .from("userinfo")
@@ -22,10 +19,7 @@ const getOwnUserinfo = async (): Promise<Userinfo> => {
 };
 
 const getUserinfoById = async (userId: string): Promise<Userinfo> => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  await getAuth();
 
   const { data, error } = await supabase
     .from("userinfo")

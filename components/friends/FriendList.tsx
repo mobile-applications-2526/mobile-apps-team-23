@@ -48,22 +48,67 @@ export default function FriendList({
             elevation: 2,
           }}
         >
-          <Text style={{ fontSize: 18, marginBottom: 8, fontWeight: "bold" }}>
-            {friend.name}
-          </Text>
-          <View style={{ flexDirection: "row", justifyContent: "flex-end" }}>
-            <Button
-              title="Message"
-              containerStyle={{ minWidth: 90 }}
-              onPress={() => onFriendMessage(friend.id!)}
-            />
-            <Button
-              title="Remove Friend"
-              containerStyle={{ minWidth: 90, marginLeft: 8 }}
-              type="outline"
-              color="#ff3b30"
-              onPress={() => onFriendRemove(friend.id!)}
-            />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: 18,
+                marginRight: 12,
+                fontWeight: "bold",
+                flex: 1,
+              }}
+              numberOfLines={1}
+              ellipsizeMode="tail"
+            >
+              {friend.name}
+            </Text>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Button
+                containerStyle={{
+                  width: 48,
+                }}
+                buttonStyle={{
+                  height: 48,
+                  borderRadius: 24,
+                  padding: 0,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+                onPress={() => onFriendMessage(friend.id!)}
+                icon={{
+                  type: "font-awesome",
+                  name: "comments",
+                  color: "#ffffff",
+                  size: 16,
+                }}
+              />
+              <Button
+                containerStyle={{
+                  width: 48,
+                  marginLeft: 8,
+                }}
+                buttonStyle={{
+                  height: 48,
+                  borderRadius: 24,
+                  padding: 0,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  backgroundColor: "#d9534f",
+                }}
+                onPress={() => onFriendRemove(friend.id!)}
+                icon={{
+                  type: "font-awesome",
+                  name: "user-times",
+                  size: 16,
+                  color: "#ffffff",
+                }}
+              />
+            </View>
           </View>
         </View>
       ))}
