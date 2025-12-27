@@ -16,6 +16,11 @@ export default function LogoutButton({
       title="Sign Out"
       onPress={() => supabase.auth.signOut()}
       color="#d9534f"
+      icon={{
+        name: "sign-out",
+        type: "font-awesome",
+        color: "#ffffff",
+      }}
     />
   );
 }

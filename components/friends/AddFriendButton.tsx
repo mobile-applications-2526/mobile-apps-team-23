@@ -19,6 +19,11 @@ export default function AddFriendButton({
         buttonStyle={buttonStyle}
         title="Add friend"
         onPress={() => setAddFriendDialogOpen(true)}
+        icon={{
+          name: "user-plus",
+          type: "font-awesome",
+          color: "#ffffff",
+        }}
       />
       <AddFriendDialog
         open={addFriendDialogOpen}
