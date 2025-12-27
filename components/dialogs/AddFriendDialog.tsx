@@ -1,11 +1,4 @@
-import {
-  KeyboardAvoidingView,
-  Modal,
-  StyleProp,
-  Text,
-  View,
-  ViewStyle,
-} from "react-native";
+import { KeyboardAvoidingView, Modal, Text, View } from "react-native";
 import { Button, Input } from "@rneui/themed";
 import { useEffect, useState } from "react";
 import FriendService from "@/services/FriendService";
@@ -18,7 +11,6 @@ export default function AddFriendDialog({
 }: {
   open: boolean;
   onClose: () => void;
-  style?: StyleProp<ViewStyle>;
 }) {
   const [ownCode, setOwnCode] = useState<string | undefined>(undefined);
   const [friendCode, setFriendCode] = useState<string | null>(null);

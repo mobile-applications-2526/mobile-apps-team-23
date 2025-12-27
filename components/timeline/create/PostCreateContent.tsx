@@ -8,12 +8,14 @@ import PostCreateBottomButtons from "@/components/timeline/create/PostCreateBott
 import PostCreateImageSelect from "@/components/timeline/create/PostCreateImageSelect";
 import PostCreateTitleAndContentInputs from "@/components/timeline/create/PostCreateTitleAndContentInputs";
 import { HEADER_HEIGHT } from "@/constants/ui";
+import ErrorDialog from "@/components/dialogs/ErrorDialog";
 
 export default function PostCreateContent({ router }: { router: Router }) {
   const [isImageEnabled, setIsImageEnabled] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [imageUrl, setImageUrl] = useState<string | undefined>("");
+  const [error, setError] = useState<string | null>(null);
 
   const onSwitchImageToggle = (value: boolean) => {
     setIsImageEnabled(value);
@@ -37,7 +39,11 @@ export default function PostCreateContent({ router }: { router: Router }) {
       await mutate("timelinePosts");
       router.back();
     } catch (error) {
-      console.error("Error creating post:", error);
+      setError(
+        error instanceof Error
+          ? error.message
+          : "An unknown error occurred while creating the post.",
+      );
     }
   };
 
@@ -59,6 +65,13 @@ export default function PostCreateContent({ router }: { router: Router }) {
         textInputStyle={styles.baseInput}
       />
       <PostCreateBottomButtons router={router} onCreatePost={onCreatePost} />
+      {error && (
+        <ErrorDialog
+          errorMessage={error}
+          open={true}
+          onClose={() => setError(null)}
+        />
+      )}
     </KeyboardAvoidingView>
   );
 }
