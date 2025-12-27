@@ -1,12 +1,13 @@
 import FriendList from "@/components/friends/FriendList";
 import FriendRequestList from "@/components/friends/FriendRequestList";
-import { View } from "react-native";
+import { SafeAreaView, ScrollView, View } from "react-native";
 import AddFriendButton from "@/components/friends/AddFriendButton";
 import LogoutButton from "@/components/LogoutButton";
 import { Router } from "expo-router";
 import { useState } from "react";
 import { Button } from "@rneui/themed";
 import PostsList from "@/components/timeline/PostsList";
+import PostCreateButton from "@/components/timeline/PostCreateButton";
 
 export default function HomeContent({ router }: { router: Router }) {
   const [isTimeline, setIsTimeline] = useState(false);
@@ -46,8 +47,9 @@ export default function HomeContent({ router }: { router: Router }) {
           }}
         />
       </View>
+
       {!isTimeline && (
-        <View>
+        <ScrollView>
           <FriendList router={router} />
           <FriendRequestList style={{ marginTop: 12 }} />
           <View style={{ flexDirection: "row", marginTop: 12 }}>
@@ -58,12 +60,24 @@ export default function HomeContent({ router }: { router: Router }) {
               <LogoutButton buttonStyle={{ borderRadius: 12 }} />
             </View>
           </View>
-        </View>
+        </ScrollView>
       )}
       {isTimeline && (
-        <View>
-          <PostsList />
-        </View>
+        <SafeAreaView style={{ flex: 1 }}>
+          <ScrollView
+            style={{
+              flex: 1,
+            }}
+            contentContainerStyle={{ flexGrow: 1 }}
+          >
+            <PostsList />
+          </ScrollView>
+          <PostCreateButton
+            router={router}
+            containerStyle={{ marginTop: 12 }}
+            buttonStyle={{ borderRadius: 12 }}
+          />
+        </SafeAreaView>
       )}
     </>
   );

@@ -1,16 +1,35 @@
 import { StyleProp, Text, View, ViewStyle } from "react-native";
 import useSWR, { mutate } from "swr";
 import PostsService from "@/services/PostsService";
-import { TimeLinePost } from "@/types/models";
+import { TimeLinePost, Userinfo } from "@/types/models";
 import { Button } from "@rneui/themed";
 import DynamicImage from "@/components/DynamicImage";
+import { useEffect, useState } from "react";
+import UserService from "@/services/UserService";
 
 export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
+  const [ownUserInfo, setOwnUserInfo] = useState<Userinfo | null>(null);
+
   const { data: posts = [] } = useSWR<TimeLinePost[]>(
     "timelinePosts",
     PostsService.getPosts,
     { refreshInterval: 15000 },
   );
+
+  useEffect(() => {
+    UserService.getOwnUserinfo()
+      .then((userInfo) => setOwnUserInfo(userInfo))
+      .catch(console.error);
+  }, []);
+
+  const onDeletePress = async (postId: number) => {
+    try {
+      await PostsService.deletePost(postId);
+      await mutate("timelinePosts");
+    } catch (err) {
+      console.error("Failed to delete post:", err);
+    }
+  };
 
   const onLikePress = async (post: TimeLinePost) => {
     try {
@@ -117,21 +136,39 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
             ) : (
               <View />
             )}
-            <Button
-              type="clear"
-              buttonStyle={{ padding: 0 }}
-              titleStyle={{ color: "#007bff" }}
-              onPress={async () => {
-                await onLikePress(post);
-              }}
-              title={`${post.like_count ?? 0}`}
-              icon={{
-                name: post.is_liked_by_user ? "thumbs-up" : "thumbs-o-up",
-                type: "font-awesome",
-                size: 16,
-                color: "#007bff",
-              }}
-            />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              {ownUserInfo && post.creator?.id === ownUserInfo.id && (
+                <Button
+                  type="clear"
+                  buttonStyle={{ padding: 0 }}
+                  titleStyle={{ color: "#ff3b30" }}
+                  onPress={async () => {
+                    await onDeletePress(post.id!);
+                  }}
+                  icon={{
+                    name: "trash",
+                    type: "font-awesome",
+                    size: 16,
+                    color: "#ff3b30",
+                  }}
+                />
+              )}
+              <Button
+                type="clear"
+                buttonStyle={{ padding: 0 }}
+                titleStyle={{ color: "#007bff" }}
+                onPress={async () => {
+                  await onLikePress(post);
+                }}
+                title={`${post.like_count ?? 0}`}
+                icon={{
+                  name: post.is_liked_by_user ? "thumbs-up" : "thumbs-o-up",
+                  type: "font-awesome",
+                  size: 16,
+                  color: "#007bff",
+                }}
+              />
+            </View>
           </View>
         </View>
       ))}
