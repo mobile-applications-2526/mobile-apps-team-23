@@ -109,7 +109,7 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
             {post.title || "(No Title)"}
           </Text>
           <Text>{post.description}</Text>
-          {post.image_url ? (
+          {post.image_url && (
             <View style={{ marginTop: 8 }}>
               <DynamicImage
                 uri={post.image_url}
@@ -118,8 +118,6 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
                 }}
               />
             </View>
-          ) : (
-            <></>
           )}
           <View
             style={{
