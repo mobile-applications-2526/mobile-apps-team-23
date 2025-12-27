@@ -85,9 +85,13 @@ const createPost = async (post: Post) => {
 };
 
 const deletePost = async (postId: number): Promise<void> => {
-  await getAuth();
+  const user = await getAuth();
 
-  const { error } = await supabase.from("posts").delete().eq("id", postId);
+  const { error } = await supabase
+    .from("posts")
+    .delete()
+    .eq("id", postId)
+    .eq("creator_id", user.id);
 
   if (error) {
     console.log(error);
