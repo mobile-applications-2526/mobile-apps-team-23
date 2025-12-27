@@ -3,13 +3,16 @@ import { Button } from "@rneui/themed";
 import { supabase } from "@/utils/supabase";
 
 export default function LogoutButton({
-  style,
+  containerStyle,
+  buttonStyle,
 }: {
-  style?: StyleProp<ViewStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
+  buttonStyle?: StyleProp<ViewStyle>;
 }) {
   return (
     <Button
-      style={style}
+      containerStyle={containerStyle}
+      buttonStyle={buttonStyle}
       title="Sign Out"
       onPress={() => supabase.auth.signOut()}
       color="#d9534f"
