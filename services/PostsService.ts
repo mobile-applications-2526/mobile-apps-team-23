@@ -35,8 +35,6 @@ const likePost = async (postId: number): Promise<void> => {
       `Failed to like post: ${error.message || JSON.stringify(error)}`,
     );
   }
-
-  return;
 };
 
 const unlikePost = async (postId: number): Promise<void> => {
