@@ -4,13 +4,12 @@ import { Post, TimeLinePost } from "@/types/models";
 import PostsService from "@/services/PostsService";
 import { mutate } from "swr";
 import { Router } from "expo-router";
-import PostCreateBottomsButtons from "@/components/timeline/create/PostCreateBottomButtons";
+import PostCreateBottomButtons from "@/components/timeline/create/PostCreateBottomButtons";
 import PostCreateImageSelect from "@/components/timeline/create/PostCreateImageSelect";
 import PostCreateTitleAndContentInputs from "@/components/timeline/create/PostCreateTitleAndContentInputs";
 import { HEADER_HEIGHT } from "@/constants/ui";
 
 export default function PostCreateContent({ router }: { router: Router }) {
-
   const [isImageEnabled, setIsImageEnabled] = useState(false);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -57,7 +56,7 @@ export default function PostCreateContent({ router }: { router: Router }) {
         setImageUrl={setImageUrl}
         textInputStyle={styles.baseInput}
       />
-      <PostCreateBottomsButtons router={router} onCreatePost={onCreatePost} />
+      <PostCreateBottomButtons router={router} onCreatePost={onCreatePost} />
     </KeyboardAvoidingView>
   );
 }
