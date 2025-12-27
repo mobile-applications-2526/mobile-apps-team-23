@@ -1,11 +1,12 @@
 import { View } from "react-native";
 import { Button } from "@rneui/themed";
+import type { Router } from "expo-router";
 
 export default function PostCreateBottomsButtons({
   router,
   onCreatePost,
 }: {
-  router: any;
+  router: Router;
   onCreatePost: () => void;
 }) {
   return (
