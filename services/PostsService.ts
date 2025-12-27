@@ -1,7 +1,7 @@
 import { getAuth, supabase } from "@/utils/supabase";
-import { Post, TimeLinePost } from "@/types/models";
+import { Post, TimelinePost } from "@/types/models";
 
-const getPosts = async (): Promise<TimeLinePost[]> => {
+const getPosts = async (): Promise<TimelinePost[]> => {
   await getAuth();
 
   const { data, error } = await supabase
@@ -16,7 +16,7 @@ const getPosts = async (): Promise<TimeLinePost[]> => {
     );
   }
 
-  return data as TimeLinePost[];
+  return data as TimelinePost[];
 };
 
 const likePost = async (postId: number): Promise<void> => {
@@ -81,7 +81,7 @@ const createPost = async (post: Post) => {
     );
   }
 
-  return data[0] as TimeLinePost;
+  return data[0] as TimelinePost;
 };
 
 const deletePost = async (postId: number): Promise<void> => {

@@ -1,7 +1,7 @@
 import { StyleProp, Text, View, ViewStyle } from "react-native";
 import useSWR, { mutate } from "swr";
 import PostsService from "@/services/PostsService";
-import { TimeLinePost, Userinfo } from "@/types/models";
+import { TimelinePost, Userinfo } from "@/types/models";
 import { Button } from "@rneui/themed";
 import DynamicImage from "@/components/DynamicImage";
 import { useEffect, useState } from "react";
@@ -10,7 +10,7 @@ import UserService from "@/services/UserService";
 export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
   const [ownUserInfo, setOwnUserInfo] = useState<Userinfo | null>(null);
 
-  const { data: posts = [] } = useSWR<TimeLinePost[]>(
+  const { data: posts = [] } = useSWR<TimelinePost[]>(
     "timelinePosts",
     PostsService.getPosts,
     { refreshInterval: 15000 },
@@ -31,7 +31,7 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
     }
   };
 
-  const onLikePress = async (post: TimeLinePost) => {
+  const onLikePress = async (post: TimelinePost) => {
     try {
       // Optimistically update the UI
       await mutate(
@@ -39,7 +39,7 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
         (currentPosts) => {
           if (!currentPosts) return currentPosts;
 
-          return currentPosts.map((p: TimeLinePost) => {
+          return currentPosts.map((p: TimelinePost) => {
             if (p.id === post.id) {
               const isLiked = p.is_liked_by_user;
               const currentCount = p.like_count ?? 0;
@@ -74,7 +74,7 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
   return (
     <View style={style}>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>Timeline</Text>
-      {posts.map((post: TimeLinePost) => (
+      {posts.map((post: TimelinePost) => (
         <View
           key={post.id}
           style={{

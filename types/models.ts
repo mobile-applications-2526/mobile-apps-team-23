@@ -34,7 +34,7 @@ export type Post = {
   image_url?: string;
 };
 
-export type TimeLinePost = Post & {
+export type TimelinePost = Post & {
   creator?: Userinfo;
   like_count?: number;
   is_liked_by_user?: boolean;

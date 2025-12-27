@@ -1,6 +1,6 @@
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
 import { useState } from "react";
-import { Post, TimeLinePost } from "@/types/models";
+import { Post, TimelinePost } from "@/types/models";
 import PostsService from "@/services/PostsService";
 import { mutate } from "swr";
 import { Router } from "expo-router";
@@ -30,7 +30,7 @@ export default function PostCreateContent({ router }: { router: Router }) {
     };
 
     try {
-      const createdPost: TimeLinePost = await PostsService.createPost(post);
+      const createdPost: TimelinePost = await PostsService.createPost(post);
       await PostsService.likePost(createdPost.id!);
       await mutate("timelinePosts");
       router.back();
