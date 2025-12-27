@@ -1,4 +1,4 @@
-import { TextInput, View } from "react-native";
+import { StyleProp, TextInput, TextStyle, View } from "react-native";
 
 export default function PostCreateTitleAndContentInputs({
   setTitle,
@@ -7,7 +7,7 @@ export default function PostCreateTitleAndContentInputs({
 }: {
   setTitle: (title: string) => void;
   setContent: (content: string) => void;
-  textInputStyle?: object;
+  textInputStyle?: StyleProp<TextStyle>;
 }) {
   return (
     <View style={{ flex: 1, marginBottom: 12 }}>
