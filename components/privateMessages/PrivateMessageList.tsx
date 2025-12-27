@@ -7,57 +7,31 @@ import {
   Alert,
 } from "react-native";
 import { PrivateMessage, Userinfo } from "@/types/models";
-import { useEffect, useState, useRef } from "react";
-import UserService from "@/services/UserService";
+import { useRef } from "react";
 import { useChatMessages } from "@/hooks/usePrivateChatMessages";
 import * as Haptics from "expo-haptics";
 import PrivateMessageService from "@/services/PrivateMessageService";
 
 export default function PrivateMessageList({
-  friendId,
+  ownUser,
+  friend,
   setEditingMessage,
 }: {
-  friendId: string | undefined;
+  ownUser: Userinfo | null;
+  friend: Userinfo | null;
   setEditingMessage: (message: PrivateMessage | null) => void;
 }) {
-  const [ownUserinfo, setOwnUserinfo] = useState<Userinfo | null>(null);
-  const [friend, setFriend] = useState<Userinfo | null>(null);
   const flatListRef = useRef<FlatList>(null);
 
-  useEffect(() => {
-    UserService.getOwnUserinfo()
-      .then((data) => {
-        setOwnUserinfo(data);
-      })
-      .catch((error) => {
-        console.error("Failed to fetch own user info:", error);
-        Alert.alert(
-          "Error",
-          "Unable to load your user information. Some features may not work correctly.",
-        );
-      });
-  }, []);
-
   const { messages: privateMessages } = useChatMessages(
-    friendId as string,
-    ownUserinfo?.id as string,
+    friend?.id as string,
+    ownUser?.id as string,
   );
-
-  useEffect(() => {
-    if (friendId) {
-      UserService.getUserinfoById(friendId)
-        .then(setFriend)
-        .catch((error) => {
-          console.error("Failed to fetch friend information:", error);
-          Alert.alert("Error", "Failed to load friend information.");
-        });
-    }
-  }, [friendId]);
 
   // Render a single message item
   const renderItem = ({ item }: { item: PrivateMessage }) => {
     const senderId = (item as any).senderId ?? (item as any).sender_id ?? "";
-    const isReceived = senderId === friendId;
+    const isReceived = senderId === friend?.id;
 
     const handleLongPress = async () => {
       if (!isReceived) {
@@ -152,10 +126,6 @@ export default function PrivateMessageList({
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>
-        Private Messages{friend?.name && ` with ${friend.name}`}
-      </Text>
-
       <FlatList
         ref={flatListRef}
         data={privateMessages}
@@ -175,12 +145,6 @@ export default function PrivateMessageList({
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: 12 }, // Flex 1 ensures it takes available space
-  header: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginVertical: 12,
-    textAlign: "center",
-  },
   messageBubble: {
     paddingVertical: 8,
     paddingHorizontal: 12,

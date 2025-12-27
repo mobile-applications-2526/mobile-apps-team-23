@@ -1,11 +1,8 @@
-import { supabase } from "@/utils/supabase";
+import { getAuth, supabase } from "@/utils/supabase";
 import { Friendship, Userinfo } from "@/types/models";
 
 const getMyFriends = async (): Promise<Userinfo[]> => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuth();
 
   const { data, error } = await supabase
     .from("friendship")
@@ -44,10 +41,7 @@ const getMyFriends = async (): Promise<Userinfo[]> => {
 const getMyFriendRequests = async (): Promise<
   (Friendship & { userinfo: Userinfo })[] | null
 > => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  await getAuth();
 
   const { data } = await supabase
     .from("friendship")
@@ -59,10 +53,7 @@ const getMyFriendRequests = async (): Promise<
 };
 
 const sendFriendRequest = async (inputCode: string) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuth();
 
   // Check if input code is valid
   if (!inputCode || inputCode.trim().length === 0) {
@@ -113,10 +104,7 @@ const sendFriendRequest = async (inputCode: string) => {
 };
 
 const declineRequest = async (requestId: number) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  await getAuth();
 
   // Check if a request with the given ID exists
   const { data: existingRequest } = await supabase
@@ -145,10 +133,7 @@ const declineRequest = async (requestId: number) => {
 };
 
 const acceptRequest = async (requestId: number) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  await getAuth();
 
   // Check if a request with the given ID exists
   const { data: existingRequest } = await supabase
@@ -177,10 +162,7 @@ const acceptRequest = async (requestId: number) => {
 };
 
 const removeFriend = async (friendId: string) => {
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) throw new Error("User not authenticated");
+  const user = await getAuth();
 
   // Check if friendship exists
   const { data: existingFriendship } = await supabase
