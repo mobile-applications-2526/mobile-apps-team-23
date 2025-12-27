@@ -1,8 +1,9 @@
-import { StyleProp, Text, View, ViewStyle, Image } from "react-native";
+import { StyleProp, Text, View, ViewStyle } from "react-native";
 import useSWR, { mutate } from "swr";
 import PostsService from "@/services/PostsService";
 import { TimeLinePost } from "@/types/models";
 import { Button } from "@rneui/themed";
+import DynamicImage from "@/components/DynamicImage";
 
 export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
   const { data: posts = [] } = useSWR<TimeLinePost[]>(
@@ -68,16 +69,34 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
             elevation: 2,
           }}
         >
-          <Text style={{ marginBottom: 8, fontWeight: "bold", fontSize: 16 }}>
+          <Text
+            style={{
+              marginBottom: 8,
+              fontWeight: "bold",
+              fontSize: 16,
+              fontStyle: "italic",
+            }}
+          >
             {post.creator?.name ?? "Unknown User"}
+          </Text>
+          <Text
+            style={{
+              fontSize: 16,
+              fontWeight: "600",
+              marginBottom: 4,
+              color: post.title ? "#000000" : "#888888",
+            }}
+          >
+            {post.title || "(No Title)"}
           </Text>
           <Text>{post.description}</Text>
           {post.image_url ? (
             <View style={{ marginTop: 8 }}>
-              <Image
-                source={{ uri: post.image_url }}
-                style={{ width: "100%", height: 200, borderRadius: 8 }}
-                resizeMode="cover"
+              <DynamicImage
+                uri={post.image_url}
+                style={{
+                  borderRadius: 8,
+                }}
               />
             </View>
           ) : (
