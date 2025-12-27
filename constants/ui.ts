@@ -7,4 +7,4 @@
  * This value represents the typical iOS/Android navigation header height
  * including status bar. Used primarily for KeyboardAvoidingView offset calculations.
  */
-export const HEADER_HEIGHT = 90;
+export const HEADER_HEIGHT = 100;
