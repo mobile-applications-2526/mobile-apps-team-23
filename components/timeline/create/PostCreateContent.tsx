@@ -73,6 +73,12 @@ export default function PostCreateContent({ router }: { router: Router }) {
     const location: { latitude: number; longitude: number } | null =
       isLocationEnabled ? await LocationService.getClientLocation() : null;
 
+    if (isLocationEnabled && !location) {
+      setError(
+        "Unable to capture your location. Please check your location permissions and try again.",
+      );
+      return;
+    }
     const post: Post = {
       title,
       description: content,
