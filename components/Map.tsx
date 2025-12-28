@@ -24,10 +24,21 @@ export default function MapScreen() {
   async function getUserLocation() {
     try {
       const location = await LocationService.getClientLocation();
+
+      // If location or its coordinates are unavailable, do not set a misleading default.
+      if (
+        !location ||
+        location.latitude == null ||
+        location.longitude == null
+      ) {
+        setUserLocation(null);
+        return;
+      }
+
       const locationObject: Location.LocationObject = {
         coords: {
-          latitude: location?.latitude || 0,
-          longitude: location?.longitude || 0,
+          latitude: location.latitude,
+          longitude: location.longitude,
           altitude: null,
           accuracy: null,
           altitudeAccuracy: null,
