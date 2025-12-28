@@ -39,8 +39,6 @@ export default function RootLayout() {
         async (payload) => {
           const newMessage = payload.new;
 
-          console.log("New private message received:", newMessage);
-
           // Trigger the local notification
           await Notifications.scheduleNotificationAsync({
             content: {
