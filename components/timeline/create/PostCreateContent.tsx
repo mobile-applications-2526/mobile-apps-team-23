@@ -27,17 +27,29 @@ export default function PostCreateContent({ router }: { router: Router }) {
 
   const onSwitchLocationToggle = async (value: boolean) => {
     if (value) {
-      // Only attempt to enable location if permission is granted
       try {
-        // Attempt to get the client's location, which will request permission if needed
-        await LocationService.getClientLocation();
+        // Check if user has already granted location permission
+        const granted = await LocationService.getLocationPermissionStatus();
+
+        if (!granted) {
+          // Request permission from the user
+          const requested = await LocationService.requestLocationPermission();
+          if (!requested) {
+            throw new Error("Location permission denied by user.");
+          }
+        }
+
+        // If we reach here, permission is granted
         setIsLocationEnabled(true);
       } catch (e) {
+        // Permission was not granted or an error occurred
         setIsLocationEnabled(false);
-        setError(
-          "Location access is required to attach your location. " +
-            "Please enable location permissions for this app in your device settings.",
-        );
+
+        if (e instanceof Error && e.message) {
+          setError(e.message);
+        } else {
+          setError("Location permission is required to use this feature.");
+        }
       }
     } else {
       setIsLocationEnabled(false);
