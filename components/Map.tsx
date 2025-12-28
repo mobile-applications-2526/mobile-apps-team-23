@@ -2,11 +2,13 @@ import MapView, { Marker } from "react-native-maps";
 import { useEffect, useRef, useState } from "react";
 import { View, Button, StyleSheet } from "react-native";
 import * as Location from "expo-location";
-import { supabase } from "../utils/supabase";
+import { supabase } from "@/utils/supabase";
+import LocationService from "@/services/LocationService";
 
 export default function MapScreen() {
   const [locations, setLocations] = useState<any[]>([]);
-  const [userLocation, setUserLocation] = useState<Location.LocationObject | null>(null);
+  const [userLocation, setUserLocation] =
+    useState<Location.LocationObject | null>(null);
   const mapRef = useRef<MapView>(null);
 
   useEffect(() => {
@@ -20,29 +22,26 @@ export default function MapScreen() {
   }
 
   async function getUserLocation() {
-    const { status } = await Location.requestForegroundPermissionsAsync();
-    if (status !== "granted") return;
-
-    // haal huidige locatie één keer op
-    const location = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-    setUserLocation(location);
-
-    // map automatisch centreren
-    if (mapRef.current) {
-      mapRef.current.animateCamera({
-        center: {
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
+    try {
+      const location = await LocationService.getClientLocation();
+      const locationObject: Location.LocationObject = {
+        coords: {
+          latitude: location?.latitude || 0,
+          longitude: location?.longitude || 0,
+          altitude: null,
+          accuracy: null,
+          altitudeAccuracy: null,
+          heading: null,
+          speed: null,
         },
-        zoom: 16,
-      });
-    }
+        timestamp: Date.now(),
+        mocked: false,
+      };
 
-    // realtime updates volgen
-    Location.watchPositionAsync(
-      { accuracy: Location.Accuracy.High, distanceInterval: 1 },
-      (loc) => setUserLocation(loc)
-    );
+      setUserLocation(locationObject);
+    } catch (err) {
+      return null;
+    }
   }
 
   function goToUserLocation() {
