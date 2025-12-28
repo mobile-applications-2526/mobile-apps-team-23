@@ -7,7 +7,7 @@ import {
   View,
 } from "react-native";
 
-export default function PostCreateImageSelect({
+export default function PostCreateSelects({
   isImageEnabled,
   onSwitchImageToggle,
   isLocationEnabled,

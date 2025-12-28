@@ -5,7 +5,7 @@ import PostsService from "@/services/PostsService";
 import { mutate } from "swr";
 import { Router } from "expo-router";
 import PostCreateBottomButtons from "@/components/timeline/create/PostCreateBottomButtons";
-import PostCreateSelects from "@/components/timeline/create/PostCreateImageSelect";
+import PostCreateSelects from "@/components/timeline/create/PostCreateSelects";
 import PostCreateTitleAndContentInputs from "@/components/timeline/create/PostCreateTitleAndContentInputs";
 import { HEADER_HEIGHT } from "@/constants/ui";
 import ErrorDialog from "@/components/dialogs/ErrorDialog";

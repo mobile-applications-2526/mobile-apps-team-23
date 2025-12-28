@@ -134,10 +134,14 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
                 type="clear"
                 onPress={() => toggleMap(post.id)}
                 title={isMapOpen(post.id) ? "Hide location" : "Show location"}
-                // ... icon props
+                icon={{
+                  name: "map-marker",
+                  type: "font-awesome",
+                  size: 16,
+                  color: "#007bff",
+                }}
               />
 
-              {/* Hier wordt nu maximaal één MapView tegelijk gerenderd */}
               {isMapOpen(post.id) && (
                 <View style={{ marginTop: 8 }}>
                   <MapView
