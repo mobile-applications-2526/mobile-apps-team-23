@@ -24,7 +24,7 @@ const getClientLocation = async (): Promise<LocationType> => {
     // Try to get the "Last Known" position first (extremely fast and usually works on emulators)
     let location = await Location.getLastKnownPositionAsync();
 
-    // If there is no last known, or it's too old, request current position
+    // If there is no last known position, request current position
     if (!location) {
       location = await Location.getCurrentPositionAsync({
         // Lowering accuracy slightly helps the emulator return a result faster
