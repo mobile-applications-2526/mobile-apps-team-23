@@ -7,22 +7,30 @@ const getLocationPermissionStatus = async (): Promise<boolean> => {
   return status === "granted";
 };
 
+const requestLocationPermission = async (): Promise<boolean> => {
+  const { status } = await Location.requestForegroundPermissionsAsync();
+  return status === "granted";
+};
+
 const getClientLocation = async (): Promise<LocationType> => {
   try {
     // Ask for location permissions
     const hasPermission = await getLocationPermissionStatus();
     if (!hasPermission) {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        console.warn("Location permission not granted.");
-        return null;
-      }
+      const granted = await requestLocationPermission();
+      if (!granted) return null;
     }
 
-    // Get the current location
-    const location = await Location.getCurrentPositionAsync({
-      accuracy: Location.Accuracy.Balanced,
-    });
+    // Try to get the "Last Known" position first (extremely fast and usually works on emulators)
+    let location = await Location.getLastKnownPositionAsync();
+
+    // If there is no last known position, request current position
+    if (!location) {
+      location = await Location.getCurrentPositionAsync({
+        // Lowering accuracy slightly helps the emulator return a result faster
+        accuracy: Location.Accuracy.Balanced,
+      });
+    }
 
     // Return the latitude and longitude
     return {
@@ -37,6 +45,7 @@ const getClientLocation = async (): Promise<LocationType> => {
 
 const LocationService = {
   getLocationPermissionStatus,
+  requestLocationPermission,
   getClientLocation,
 };
 

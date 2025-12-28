@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { PrivateMessage } from "@/types/models";
 import PrivateMessageService from "@/services/PrivateMessageService";
 import { supabase } from "@/utils/supabase";
+import { scheduleNotificationAsync } from "expo-notifications";
+import UserService from "@/services/UserService";
 
 export function useChatMessages(friendId: string, currentUserId: string) {
   const [messages, setMessages] = useState<PrivateMessage[]>([]);
@@ -40,7 +42,27 @@ export function useChatMessages(friendId: string, currentUserId: string) {
           const newMessage = payload.new as PrivateMessage;
 
           if (checkValidity(newMessage)) {
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
+            // If the sender isn't the current user, show a notification
+            if (newMessage.sender_id === friendId) {
+              UserService.getUserinfoById(friendId)
+                .then((friend) => {
+                  const title = `New message from ${friend?.name ?? "Friend"}`;
+                  scheduleNotificationAsync({
+                    content: {
+                      title,
+                      body: newMessage.content,
+                      data: { friendId },
+                    },
+                    trigger: null,
+                  }).catch((err) =>
+                    console.error("Failed to schedule notification:", err),
+                  );
+                })
+                .catch((err) =>
+                  console.error("Failed to fetch friend info:", err),
+                );
+            }
+            setMessages((prev) => [...prev, newMessage]);
           }
         },
       )

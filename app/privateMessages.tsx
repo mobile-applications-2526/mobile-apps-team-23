@@ -1,5 +1,5 @@
 import { useLocalSearchParams } from "expo-router";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/hooks/auth/useAuth";
 import PrivateMessageList from "@/components/privateMessages/PrivateMessageList";
 import {
   Alert,
