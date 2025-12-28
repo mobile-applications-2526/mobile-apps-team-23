@@ -28,7 +28,6 @@ export default function PostCreateContent({ router }: { router: Router }) {
   const onSwitchLocationToggle = async (value: boolean) => {
     if (value) {
       // Only attempt to enable location if permission is granted
-      const granted = await LocationService.getLocationPermissionStatus();
       try {
         // Attempt to get the client's location, which will request permission if needed
         await LocationService.getClientLocation();
