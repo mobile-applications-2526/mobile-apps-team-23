@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { PrivateMessage, Userinfo } from "@/types/models";
 import { useRef } from "react";
-import { useChatMessages } from "@/hooks/usePrivateChatMessages";
+import { useChatMessages } from "@/hooks/privateMessages/usePrivateChatMessages";
 import * as Haptics from "expo-haptics";
 import PrivateMessageService from "@/services/PrivateMessageService";
 
