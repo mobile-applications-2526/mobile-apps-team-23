@@ -1,23 +1,50 @@
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Post, TimelinePost } from "@/types/models";
 import PostsService from "@/services/PostsService";
 import { mutate } from "swr";
 import { Router } from "expo-router";
 import PostCreateBottomButtons from "@/components/timeline/create/PostCreateBottomButtons";
-import PostCreateImageSelect from "@/components/timeline/create/PostCreateImageSelect";
+import PostCreateSelects from "@/components/timeline/create/PostCreateSelects";
 import PostCreateTitleAndContentInputs from "@/components/timeline/create/PostCreateTitleAndContentInputs";
 import { HEADER_HEIGHT } from "@/constants/ui";
 import ErrorDialog from "@/components/dialogs/ErrorDialog";
+import LocationService from "@/services/LocationService";
 
 export default function PostCreateContent({ router }: { router: Router }) {
-  const [isImageEnabled, setIsImageEnabled] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [isLocationEnabled, setIsLocationEnabled] = useState<boolean>(false);
+  const [isImageEnabled, setIsImageEnabled] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>("");
+  const [content, setContent] = useState<string>("");
   const [imageUrl, setImageUrl] = useState<string | undefined>("");
   const [error, setError] = useState<string | null>(null);
 
-  const onSwitchImageToggle = (value: boolean) => {
+  useEffect(() => {
+    LocationService.getLocationPermissionStatus().then((granted) => {
+      setIsLocationEnabled(granted);
+    });
+  }, []);
+
+  const onSwitchLocationToggle = async (value: boolean) => {
+    if (value) {
+      // Only attempt to enable location if permission is granted
+      try {
+        // Attempt to get the client's location, which will request permission if needed
+        await LocationService.getClientLocation();
+        setIsLocationEnabled(true);
+      } catch (e) {
+        setIsLocationEnabled(false);
+        setError(
+          "Location access is required to attach your location. " +
+            "Please enable location permissions for this app in your device settings.",
+        );
+      }
+    } else {
+      setIsLocationEnabled(false);
+    }
+  };
+
+  const onSwitchImageToggle = async (value: boolean) => {
     setIsImageEnabled(value);
     if (!value) {
       setImageUrl(undefined);
@@ -43,10 +70,21 @@ export default function PostCreateContent({ router }: { router: Router }) {
       }
     }
 
+    const location: { latitude: number; longitude: number } | null =
+      isLocationEnabled ? await LocationService.getClientLocation() : null;
+
+    if (isLocationEnabled && !location) {
+      setError(
+        "Unable to capture your location. Please check your location permissions and try again.",
+      );
+      return;
+    }
     const post: Post = {
       title,
       description: content,
       image_url: isImageEnabled ? trimmedImageUrl : undefined,
+      latitude: isLocationEnabled && location ? location.latitude : undefined,
+      longitude: isLocationEnabled && location ? location.longitude : undefined,
     };
 
     try {
@@ -76,9 +114,11 @@ export default function PostCreateContent({ router }: { router: Router }) {
         setContent={setContent}
         textInputStyle={styles.baseInput}
       />
-      <PostCreateImageSelect
+      <PostCreateSelects
         isImageEnabled={isImageEnabled}
         onSwitchImageToggle={onSwitchImageToggle}
+        isLocationEnabled={isLocationEnabled}
+        onSetLocationToggle={onSwitchLocationToggle}
         setImageUrl={setImageUrl}
         textInputStyle={styles.baseInput}
       />

@@ -6,9 +6,11 @@ import { Button } from "@rneui/themed";
 import DynamicImage from "@/components/DynamicImage";
 import { useEffect, useState } from "react";
 import UserService from "@/services/UserService";
+import MapView, { Marker } from "react-native-maps";
 
 export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
   const [ownUserInfo, setOwnUserInfo] = useState<Userinfo | null>(null);
+  const [openMapId, setOpenMapId] = useState<number | null>(null);
 
   const { data: posts = [] } = useSWR<TimelinePost[]>(
     "timelinePosts",
@@ -71,6 +73,12 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
     }
   };
 
+  const isMapOpen = (postId?: number) => postId != null && openMapId === postId;
+  const toggleMap = (postId?: number) => {
+    if (postId == null) return;
+    setOpenMapId((prevId) => (prevId === postId ? null : postId));
+  };
+
   return (
     <View style={style}>
       <Text style={{ fontSize: 20, fontWeight: "bold" }}>Timeline</Text>
@@ -119,6 +127,44 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
               />
             </View>
           )}
+
+          {post.longitude && post.latitude && (
+            <View style={{ marginTop: 8 }}>
+              <Button
+                type="clear"
+                onPress={() => toggleMap(post.id)}
+                title={isMapOpen(post.id) ? "Hide location" : "Show location"}
+                icon={{
+                  name: "map-marker",
+                  type: "font-awesome",
+                  size: 16,
+                  color: "#007bff",
+                }}
+              />
+
+              {isMapOpen(post.id) && (
+                <View style={{ marginTop: 8 }}>
+                  <MapView
+                    style={{ width: "100%", height: 200, borderRadius: 8 }}
+                    initialRegion={{
+                      latitude: post.latitude,
+                      longitude: post.longitude,
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
+                    }}
+                  >
+                    <Marker
+                      coordinate={{
+                        latitude: post.latitude,
+                        longitude: post.longitude,
+                      }}
+                    />
+                  </MapView>
+                </View>
+              )}
+            </View>
+          )}
+
           <View
             style={{
               flexDirection: "row",
