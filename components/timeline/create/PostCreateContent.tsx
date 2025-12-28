@@ -29,13 +29,16 @@ export default function PostCreateContent({ router }: { router: Router }) {
     if (value) {
       // Only attempt to enable location if permission is granted
       const granted = await LocationService.getLocationPermissionStatus();
-      if (granted) {
+      try {
+        // Attempt to get the client's location, which will request permission if needed
+        await LocationService.getClientLocation();
         setIsLocationEnabled(true);
-      } else {
-        setError(
-          "Location permission is not granted. Please enable it in your device settings.",
-        );
+      } catch (e) {
         setIsLocationEnabled(false);
+        setError(
+          "Location access is required to attach your location. " +
+            "Please enable location permissions for this app in your device settings.",
+        );
       }
     } else {
       setIsLocationEnabled(false);
