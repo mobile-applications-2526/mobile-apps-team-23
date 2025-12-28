@@ -17,9 +17,13 @@ export default function RootLayout() {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    getAuth().then((u) => {
-      setUser(u);
-    });
+    getAuth()
+      .then((u) => {
+        setUser(u);
+      })
+      .catch(() => {
+        setUser(null);
+      });
   }, []);
 
   useEffect(() => {
