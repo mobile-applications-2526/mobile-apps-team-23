@@ -67,7 +67,8 @@ const createPost = async (post: Post) => {
       creator_id: user.id,
       title: post.title,
       description: post.description,
-      location: post.location,
+      longitude: post.longitude,
+      latitude: post.latitude,
       image_url: post.image_url,
     })
     .select("*, creator:userinfo(id, name), like_count, is_liked_by_user");

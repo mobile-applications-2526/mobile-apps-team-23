@@ -30,7 +30,8 @@ export type Post = {
   creator_id?: string;
   title?: string;
   description?: string;
-  location?: string;
+  longitude?: number;
+  latitude?: number;
   image_url?: string;
 };
 
