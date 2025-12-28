@@ -15,10 +15,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.anonymous.Trackingsocialsapp",
-      "config": {
-        "googleMaps": {}
-      }
+      "package": "com.anonymous.Trackingsocialsapp"
     },
     "icon": "./assets/images/icon.png",
     "scheme": "mobileapp",
