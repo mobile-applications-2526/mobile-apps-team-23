@@ -56,7 +56,7 @@ export default function PostCreateContent({ router }: { router: Router }) {
 
     if (isImageEnabled) {
       if (!trimmedImageUrl) {
-        console.error("Image URL is required when image is enabled.");
+        setError("Image URL cannot be empty when image option is enabled.");
         return;
       }
 
@@ -65,7 +65,7 @@ export default function PostCreateContent({ router }: { router: Router }) {
         // This will throw if the URL is not syntactically valid
         new URL(trimmedImageUrl);
       } catch (e) {
-        console.error("Invalid image URL format:", e);
+        setError("Please enter a valid image URL.");
         return;
       }
     }
