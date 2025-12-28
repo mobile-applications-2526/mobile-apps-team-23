@@ -12,9 +12,7 @@ import ErrorDialog from "@/components/dialogs/ErrorDialog";
 import LocationService from "@/services/LocationService";
 
 export default function PostCreateContent({ router }: { router: Router }) {
-  const [isLocationEnabled, setIsLocationEnabled] = useState<boolean | null>(
-    null,
-  );
+  const [isLocationEnabled, setIsLocationEnabled] = useState<boolean>(false);
   const [isImageEnabled, setIsImageEnabled] = useState<boolean>(false);
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
@@ -34,7 +32,9 @@ export default function PostCreateContent({ router }: { router: Router }) {
       if (granted) {
         setIsLocationEnabled(true);
       } else {
-        setError("Location permission is not granted...");
+        setError(
+          "Location permission is not granted. Please enable it in your device settings.",
+        );
         setIsLocationEnabled(false);
       }
     } else {
@@ -109,7 +109,7 @@ export default function PostCreateContent({ router }: { router: Router }) {
       <PostCreateSelects
         isImageEnabled={isImageEnabled}
         onSwitchImageToggle={onSwitchImageToggle}
-        isLocationEnabled={isLocationEnabled || false}
+        isLocationEnabled={isLocationEnabled}
         onSetLocationToggle={onSwitchLocationToggle}
         setImageUrl={setImageUrl}
         textInputStyle={styles.baseInput}
