@@ -17,9 +17,7 @@
       "edgeToEdgeEnabled": true,
       "package": "com.anonymous.Trackingsocialsapp",
       "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyCYMrUSOAvbN8fay50UA1ieLhsj02nMVjo"
-        }
+        "googleMaps": {}
       }
     },
     "icon": "./assets/images/icon.png",
