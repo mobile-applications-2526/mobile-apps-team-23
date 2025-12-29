@@ -84,11 +84,16 @@ export default function AddFriendDialog({
           alignItems: "center",
         }}
       >
-        <Button title="Cancel" type="outline" onPress={onClose} />
+        <Button
+          title="Cancel"
+          type="outline"
+          onPress={onClose}
+          buttonStyle={{ borderRadius: 8 }}
+        />
         <Button
           title="Send Request"
-          containerStyle={{ marginLeft: 8 }}
           onPress={onSendRequest}
+          buttonStyle={{ borderRadius: 8 }}
         />
       </View>
     </BaseDialog>
