@@ -1,6 +1,6 @@
 import MapView, { Marker } from "react-native-maps";
 import { useEffect, useRef, useState } from "react";
-import { View, Button, StyleSheet } from "react-native";
+import { View, Button, StyleSheet, Text } from "react-native";
 import * as Location from "expo-location";
 import { supabase } from "@/utils/supabase";
 import LocationService from "@/services/LocationService";
@@ -8,19 +8,143 @@ import LocationService from "@/services/LocationService";
 export default function MapScreen() {
   const [locations, setLocations] = useState<any[]>([]);
   const [userLocation, setUserLocation] =
+   
     useState<Location.LocationObject | null>(null);
-  const mapRef = useRef<MapView>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
+  const mapRef = useRef<MapView>(null);
+  const locationSub = useRef<Location.LocationSubscription | null>(null);
+
+  /**
+   * Init: wacht op login
+   */
   useEffect(() => {
-    fetchLocations();
-    getUserLocation();
+    const init = async () => {
+      const { data } = await supabase.auth.getSession();
+
+      if (!data.session) return;
+
+      setUserId(data.session.user.id);
+
+      fetchLocations();
+      startTracking();
+    };
+
+    init();
+
+    return () => {
+      locationSub.current?.remove();
+    };
   }, []);
 
+  /**
+   * Realtime updates
+   */
+  useEffect(() => {
+    const channel = supabase
+      .channel("locations-realtime")
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "locations" },
+        (payload) => {
+          if (!payload.new) return;
+
+          setLocations((prev) => {
+            const existing = prev.find(
+              (l) => l.user_id === payload.new.user_id
+            );
+
+            if (existing) {
+              return prev.map((l) =>
+                l.user_id === payload.new.user_id
+                  ? { ...payload.new, userinfo: existing.userinfo }
+                  : l
+              );
+            }
+
+
+            return [...prev, payload.new];
+          });
+
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
+
+  /**
+   * Fetch locations + profielnaam
+   */
   async function fetchLocations() {
-    const { data, error } = await supabase.from("locations").select("*");
-    if (!error) setLocations(data);
+    const { data, error } = await supabase
+      .from("locations")
+      .select(`
+        user_id,
+        latitude,
+        longitude,
+        updated_at,
+        userinfo (
+          name
+        )
+      `);
+
+    if (error) {
+      console.log("Fetch locations error:", error);
+      return;
+    }
+
+    setLocations(data ?? []);
   }
 
+  /**
+   * Start location tracking
+   */
+  async function startTracking() {
+    const { status } =
+      await Location.requestForegroundPermissionsAsync();
+
+    if (status !== "granted") return;
+
+    const { data: authData } = await supabase.auth.getUser();
+    const user = authData.user;
+
+    if (!user) return;
+
+    const initial =
+      await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.High,
+      });
+
+    setUserLocation(initial);
+
+    mapRef.current?.animateCamera({
+      center: {
+        latitude: initial.coords.latitude,
+        longitude: initial.coords.longitude,
+      },
+      zoom: 16,
+    });
+
+    locationSub.current =
+      await Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          distanceInterval: 5,
+        },
+        async (loc) => {
+          setUserLocation(loc);
+
+          await supabase.from("locations").upsert({
+            user_id: user.id,
+            latitude: loc.coords.latitude,
+            longitude: loc.coords.longitude,
+            updated_at: new Date().toISOString(),
+          });
+        }
+      );
   async function getUserLocation() {
     try {
       const location = await LocationService.getClientLocation();
@@ -56,15 +180,15 @@ export default function MapScreen() {
   }
 
   function goToUserLocation() {
-    if (userLocation && mapRef.current) {
-      mapRef.current.animateCamera({
-        center: {
-          latitude: userLocation.coords.latitude,
-          longitude: userLocation.coords.longitude,
-        },
-        zoom: 16,
-      });
-    }
+    if (!userLocation || !mapRef.current) return;
+
+    mapRef.current.animateCamera({
+      center: {
+        latitude: userLocation.coords.latitude,
+        longitude: userLocation.coords.longitude,
+      },
+      zoom: 16,
+    });
   }
 
   return (
@@ -73,18 +197,30 @@ export default function MapScreen() {
         ref={mapRef}
         style={{ flex: 1 }}
         showsUserLocation
-        followsUserLocation={false} // volg alleen als gebruiker op button drukt
+        followsUserLocation={false}
       >
-        {locations.map((loc) => (
-          <Marker
-            key={loc.id}
-            coordinate={{
-              latitude: loc.latitude,
-              longitude: loc.longitude,
-            }}
-            title={loc.name}
-          />
-        ))}
+        {/* Alleen vrienden tonen */}
+        {locations
+          .filter((loc) => loc.user_id !== userId)
+          .map((loc) => (
+            <Marker
+              key={loc.user_id}
+              coordinate={{
+                latitude: loc.latitude,
+                longitude: loc.longitude,
+              }}
+            >
+              <View style={{ alignItems: "center" }}>
+                {/* Naam BOVEN de locatie */}
+                <View style={styles.nameBubble}>
+                  <Text style={styles.nameText}>
+                     {loc.userinfo?.name ?? "Onbekend"}
+                   </Text>
+                </View>
+                <View style={styles.pin} />
+              </View>
+            </Marker>
+          ))}
       </MapView>
 
       <View style={styles.buttonContainer}>
@@ -102,5 +238,23 @@ const styles = StyleSheet.create({
     width: 130,
     borderRadius: 8,
     overflow: "hidden",
+  },
+  nameBubble: {
+    backgroundColor: "white",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+    marginBottom: 4,
+    elevation: 2,
+  },
+  nameText: {
+    fontWeight: "600",
+    fontSize: 12,
+  },
+  pin: {
+    width: 10,
+    height: 10,
+    backgroundColor: "red",
+    borderRadius: 5,
   },
 });

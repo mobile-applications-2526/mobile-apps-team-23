@@ -11,7 +11,6 @@ export default function Index() {
       <View>
         <Auth />
       </View>
-      <MapScreen />
     </>
   );
 }
