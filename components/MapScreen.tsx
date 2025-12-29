@@ -3,6 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { View, Button, StyleSheet, Text } from "react-native";
 import * as Location from "expo-location";
 import { supabase } from "../utils/supabase";
+import { Button } from "@rneui/themed";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 // TypeScript type voor locatie
 type LocationItem = {
@@ -170,6 +174,9 @@ export default function MapScreen() {
                   <View style={styles.pin} />
                 </View>
               </Marker>
+                description={
+                  loc.updated_at ? dayjs(loc.updated_at).fromNow() : ""
+                }
             ))}
         </MapView>
       </View>

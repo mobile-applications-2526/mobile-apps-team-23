@@ -156,6 +156,13 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
                       latitude: post.latitude,
                       longitude: post.longitude,
                     }}
+                    description={
+                      post.description
+                        ? post.description.length > 64
+                          ? `${post.description.slice(0, 64)}...`
+                          : post.description
+                        : undefined
+                    }
                   />
                 </MapView>
               </View>

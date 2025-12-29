@@ -11,6 +11,9 @@ import { useRef } from "react";
 import { useChatMessages } from "@/hooks/privateMessages/usePrivateChatMessages";
 import * as Haptics from "expo-haptics";
 import PrivateMessageService from "@/services/PrivateMessageService";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export default function PrivateMessageList({
   ownUser,
@@ -103,7 +106,7 @@ export default function PrivateMessageList({
               { color: isReceived ? "#888" : "rgba(255,255,255,0.8)" },
             ]}
           >
-            {new Date(item.created_at!).toLocaleString()}
+            {item.created_at ? dayjs(item.created_at).fromNow() : ""}
           </Text>
           {item.edited && (
             <Text
