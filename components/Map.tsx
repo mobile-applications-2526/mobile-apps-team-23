@@ -127,40 +127,6 @@ export default function MapScreen() {
     );
   }
 
-  /** Haal locatie op via service */
-  async function getUserLocation() {
-    try {
-      const location = await LocationService.getClientLocation();
-
-      if (
-        !location ||
-        location.latitude == null ||
-        location.longitude == null
-      ) {
-        setUserLocation(null);
-        return;
-      }
-
-      const locationObject: Location.LocationObject = {
-        coords: {
-          latitude: location.latitude,
-          longitude: location.longitude,
-          altitude: null,
-          accuracy: null,
-          altitudeAccuracy: null,
-          heading: null,
-          speed: null,
-        },
-        timestamp: Date.now(),
-        mocked: false,
-      };
-
-      setUserLocation(locationObject);
-    } catch (err) {
-      console.log("Failed to get user location:", err);
-    }
-  }
-
   function goToUserLocation() {
     if (!userLocation || !mapRef.current) return;
 
