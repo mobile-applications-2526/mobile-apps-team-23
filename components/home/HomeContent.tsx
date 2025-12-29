@@ -1,9 +1,9 @@
 import { Router } from "expo-router";
 import { useState } from "react";
 import HomeHeader from "@/components/home/HomeHeader";
-import HomeFriendContent from "@/components/home/HomeFriendContent";
-import HomeTimelineContent from "@/components/home/HomeTimelineContent";
-import HomeMapContent from "@/components/home/HomeMapContent";
+import HomeFriendContent from "@/components/home/content/HomeFriendContent";
+import HomeTimelineContent from "@/components/home/content/HomeTimelineContent";
+import HomeMapContent from "@/components/home/content/HomeMapContent";
 
 export enum HomeStatus {
   FRIENDS = "FRIENDS",
