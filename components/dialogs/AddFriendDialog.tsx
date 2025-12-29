@@ -50,7 +50,11 @@ export default function AddFriendDialog({
       <Text style={{ fontSize: 16, marginBottom: 12, fontWeight: "bold" }}>
         Add new friend
       </Text>
-      <Input placeholder="Friend's code" onChangeText={setFriendCode} />
+      <Input
+        placeholder="Friend's code"
+        value={friendCode ?? ""}
+        onChangeText={setFriendCode}
+      />
       {status && (
         <Text style={{ marginBottom: 12, fontStyle: "italic", color: "gray" }}>
           {status}
