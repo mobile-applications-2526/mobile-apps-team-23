@@ -1,4 +1,4 @@
-import { StyleProp, View, ViewStyle } from "react-native";
+import { View } from "react-native";
 import { Button } from "@rneui/themed";
 import { HomeStatus } from "@/components/home/HomeContent";
 

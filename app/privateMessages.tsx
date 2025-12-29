@@ -54,11 +54,9 @@ export default function PrivateMessages() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#f2f2f2" }}>
       <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        // iOS needs "padding", Android usually works automatically or with "height"
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        // Offset adjusted for navigation header and status bar
-        keyboardVerticalOffset={Platform.OS === "ios" ? HEADER_HEIGHT : 0}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1, padding: 12 }}
+        keyboardVerticalOffset={HEADER_HEIGHT}
       >
         <Text
           style={{
