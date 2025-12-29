@@ -58,13 +58,13 @@ export default function MapScreen() {
               return prev.map((l) =>
                 l.user_id === newLoc.user_id
                   ? { ...newLoc, userinfo: existing.userinfo } // nu is type correct
-                  : l
+                  : l,
               );
             }
 
             return [...prev, newLoc];
           });
-        }
+        },
       )
       .subscribe();
 
@@ -123,7 +123,7 @@ export default function MapScreen() {
           longitude: loc.coords.longitude,
           updated_at: new Date().toISOString(),
         });
-      }
+      },
     );
   }
 
@@ -141,30 +141,38 @@ export default function MapScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <MapView
-        ref={mapRef}
-        style={{ flex: 1 }}
-        showsUserLocation
-        followsUserLocation={false}
-      >
-        {locations
-          .filter((loc) => loc.user_id !== userId)
-          .map((loc) => (
-            <Marker
-              key={loc.user_id}
-              coordinate={{ latitude: loc.latitude, longitude: loc.longitude }}
-            >
-              <View style={{ alignItems: "center" }}>
-                <View style={styles.nameBubble}>
-                  <Text style={styles.nameText}>
-                    {loc.userinfo?.name ?? "Onbekend"}
-                  </Text>
+      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 8 }}>
+        Live Map
+      </Text>
+      <View style={styles.mapContainer}>
+        <MapView
+          ref={mapRef}
+          style={styles.map}
+          showsUserLocation
+          followsUserLocation={false}
+        >
+          {locations
+            .filter((loc) => loc.user_id !== userId)
+            .map((loc) => (
+              <Marker
+                key={loc.user_id}
+                coordinate={{
+                  latitude: loc.latitude,
+                  longitude: loc.longitude,
+                }}
+              >
+                <View style={{ alignItems: "center" }}>
+                  <View style={styles.nameBubble}>
+                    <Text style={styles.nameText}>
+                      {loc.userinfo?.name ?? "Onbekend"}
+                    </Text>
+                  </View>
+                  <View style={styles.pin} />
                 </View>
-                <View style={styles.pin} />
-              </View>
-            </Marker>
-          ))}
-      </MapView>
+              </Marker>
+            ))}
+        </MapView>
+      </View>
 
       <View style={styles.buttonContainer}>
         <Button title="Mijn locatie" onPress={goToUserLocation} />
@@ -181,6 +189,15 @@ const styles = StyleSheet.create({
     width: 130,
     borderRadius: 8,
     overflow: "hidden",
+  },
+  mapContainer: {
+    flex: 1,
+    borderRadius: 12,
+    overflow: "hidden", // required to clip the native map on Android
+  },
+  map: {
+    flex: 1,
+    borderRadius: 12, // helps on iOS
   },
   nameBubble: {
     backgroundColor: "white",
