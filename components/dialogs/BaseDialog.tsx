@@ -4,6 +4,7 @@ import {
   Platform,
   Pressable,
   StyleProp,
+  View,
   ViewStyle,
 } from "react-native";
 import { ReactNode } from "react";
@@ -37,59 +38,65 @@ export default function BaseDialog({
       statusBarTranslucent
       onRequestClose={onClose}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-        keyboardVerticalOffset={HEADER_HEIGHT}
-      >
-        <Pressable
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "rgba(0,0,0,0.1)",
-          }}
-          onPress={handleBackdropPress}
-          android_disableSound
+      <View style={{ flex: 1, backgroundColor: "rgba(0,0,0,0.1)" }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          style={{ flex: 1 }}
+          keyboardVerticalOffset={HEADER_HEIGHT}
         >
           <Pressable
-            onPress={(e) => e.stopPropagation()} // Prevents closing when clicking inside the dialog
-            style={[
-              {
-                width: "90%",
-                backgroundColor: "white",
-                borderRadius: 8,
-                padding: 16,
-                elevation: 5,
-                shadowColor: "#000",
-                shadowOffset: { width: 0, height: 2 },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
-                position: "relative",
-              },
-              customDialogStyle, // Apply and override with custom styles if provided
-            ]}
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+            onPress={handleBackdropPress}
             android_disableSound
           >
-            {children}
-            <Icon
-              type="font-awesome"
-              name="close"
-              size={22}
-              color="#333"
-              onPress={onClose}
-              containerStyle={{
-                position: "absolute",
-                top: 12,
-                right: 12,
-                zIndex: 99,
-              }}
-              accessibilityLabel="Close"
-              accessibilityRole="button"
-            />
+            <Pressable
+              onPress={(e) => e.stopPropagation()} // Prevents closing when clicking inside the dialog
+              style={[
+                {
+                  width: "90%",
+                  backgroundColor: "white",
+                  borderRadius: 8,
+                  padding: 16,
+                  elevation: 5,
+                  shadowColor: "#000",
+                  shadowOffset: { width: 0, height: 2 },
+                  shadowOpacity: 0.25,
+                  shadowRadius: 4,
+                  position: "relative",
+                },
+                customDialogStyle, // Apply and override with custom styles if provided
+              ]}
+              android_disableSound
+            >
+              {children}
+              <Pressable
+                onPress={onClose}
+                hitSlop={10}
+                android_disableSound
+                style={{
+                  position: "absolute",
+                  top: 12,
+                  right: 12,
+                  zIndex: 99,
+                }}
+              >
+                <Icon
+                  type="font-awesome"
+                  name="close"
+                  size={22}
+                  color="#333"
+                  accessibilityLabel="Close"
+                  accessibilityRole="button"
+                />
+              </Pressable>
+            </Pressable>
           </Pressable>
-        </Pressable>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 }
