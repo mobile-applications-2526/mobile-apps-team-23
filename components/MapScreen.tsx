@@ -141,6 +141,9 @@ export default function MapScreen() {
 
   return (
     <View style={{ flex: 1 }}>
+      <Text style={{ fontSize: 20, fontWeight: "bold", marginBottom: 8 }}>
+        Live Map
+      </Text>
       <View style={styles.mapContainer}>
         <MapView
           ref={mapRef}
