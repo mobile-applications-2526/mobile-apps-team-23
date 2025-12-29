@@ -1,6 +1,6 @@
 import useSWR, { mutate } from "swr";
 import FriendService from "@/services/FriendService";
-import { StyleProp, Text, View, ViewStyle } from "react-native";
+import { Pressable, StyleProp, Text, View, ViewStyle } from "react-native";
 import { Icon } from "@rneui/themed";
 import { Userinfo } from "@/types/models";
 import { Router } from "expo-router";
@@ -68,37 +68,49 @@ export default function FriendList({
               {friend.name}
             </Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Icon
-                containerStyle={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 24,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#6dac60",
-                }}
+              <Pressable
                 onPress={() => onFriendMessage(friend.id!)}
-                type="font-awesome"
-                name="comments"
-                size={16}
-                color="#ffffff"
-              />
-              <Icon
-                containerStyle={{
-                  width: 48,
-                  height: 48,
-                  borderRadius: 24,
-                  marginLeft: 8,
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#d9534f",
-                }}
+                style={({ pressed }) => [
+                  {
+                    width: 48,
+                    height: 48,
+                    borderRadius: 24,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#6dac60",
+                  },
+                  pressed && { opacity: 0.7 },
+                ]}
+              >
+                <Icon
+                  type="font-awesome"
+                  name="comments"
+                  size={16}
+                  color="#ffffff"
+                />
+              </Pressable>
+              <Pressable
                 onPress={() => onFriendRemove(friend.id!)}
-                type="font-awesome"
-                name="user-times"
-                size={16}
-                color="#ffffff"
-              />
+                style={({ pressed }) => [
+                  {
+                    width: 48,
+                    height: 48,
+                    borderRadius: 24,
+                    marginLeft: 8,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#d9534f",
+                  },
+                  pressed && { opacity: 0.7 },
+                ]}
+              >
+                <Icon
+                  type="font-awesome"
+                  name="user-times"
+                  size={16}
+                  color="#ffffff"
+                />
+              </Pressable>
             </View>
           </View>
         </View>
