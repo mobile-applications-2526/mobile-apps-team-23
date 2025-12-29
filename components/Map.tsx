@@ -8,24 +8,19 @@ import LocationService from "@/services/LocationService";
 export default function MapScreen() {
   const [locations, setLocations] = useState<any[]>([]);
   const [userLocation, setUserLocation] =
-   
     useState<Location.LocationObject | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
 
   const mapRef = useRef<MapView>(null);
   const locationSub = useRef<Location.LocationSubscription | null>(null);
 
-  /**
-   * Init: wacht op login
-   */
+  /** Init: wacht op login */
   useEffect(() => {
     const init = async () => {
       const { data } = await supabase.auth.getSession();
-
       if (!data.session) return;
 
       setUserId(data.session.user.id);
-
       fetchLocations();
       startTracking();
     };
@@ -37,9 +32,7 @@ export default function MapScreen() {
     };
   }, []);
 
-  /**
-   * Realtime updates
-   */
+  /** Realtime updates */
   useEffect(() => {
     const channel = supabase
       .channel("locations-realtime")
@@ -53,7 +46,6 @@ export default function MapScreen() {
             const existing = prev.find(
               (l) => l.user_id === payload.new.user_id
             );
-
             if (existing) {
               return prev.map((l) =>
                 l.user_id === payload.new.user_id
@@ -61,11 +53,8 @@ export default function MapScreen() {
                   : l
               );
             }
-
-
             return [...prev, payload.new];
           });
-
         }
       )
       .subscribe();
@@ -75,13 +64,9 @@ export default function MapScreen() {
     };
   }, []);
 
-  /**
-   * Fetch locations + profielnaam
-   */
+  /** Fetch locations + profielnaam */
   async function fetchLocations() {
-    const { data, error } = await supabase
-      .from("locations")
-      .select(`
+    const { data, error } = await supabase.from("locations").select(`
         user_id,
         latitude,
         longitude,
@@ -99,25 +84,18 @@ export default function MapScreen() {
     setLocations(data ?? []);
   }
 
-  /**
-   * Start location tracking
-   */
+  /** Start location tracking */
   async function startTracking() {
-    const { status } =
-      await Location.requestForegroundPermissionsAsync();
-
+    const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") return;
 
     const { data: authData } = await supabase.auth.getUser();
     const user = authData.user;
-
     if (!user) return;
 
-    const initial =
-      await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-
+    const initial = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+    });
     setUserLocation(initial);
 
     mapRef.current?.animateCamera({
@@ -128,28 +106,29 @@ export default function MapScreen() {
       zoom: 16,
     });
 
-    locationSub.current =
-      await Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.High,
-          distanceInterval: 5,
-        },
-        async (loc) => {
-          setUserLocation(loc);
+    locationSub.current = await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.High,
+        distanceInterval: 5,
+      },
+      async (loc) => {
+        setUserLocation(loc);
 
-          await supabase.from("locations").upsert({
-            user_id: user.id,
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-            updated_at: new Date().toISOString(),
-          });
-        }
-      );
+        await supabase.from("locations").upsert({
+          user_id: user.id,
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+          updated_at: new Date().toISOString(),
+        });
+      }
+    );
+  }
+
+  /** Haal locatie op via service */
   async function getUserLocation() {
     try {
       const location = await LocationService.getClientLocation();
 
-      // If location or its coordinates are unavailable, do not set a misleading default.
       if (
         !location ||
         location.latitude == null ||
@@ -175,7 +154,7 @@ export default function MapScreen() {
 
       setUserLocation(locationObject);
     } catch (err) {
-      return null;
+      console.log("Failed to get user location:", err);
     }
   }
 
@@ -211,11 +190,10 @@ export default function MapScreen() {
               }}
             >
               <View style={{ alignItems: "center" }}>
-                {/* Naam BOVEN de locatie */}
                 <View style={styles.nameBubble}>
                   <Text style={styles.nameText}>
-                     {loc.userinfo?.name ?? "Onbekend"}
-                   </Text>
+                    {loc.userinfo?.name ?? "Onbekend"}
+                  </Text>
                 </View>
                 <View style={styles.pin} />
               </View>
