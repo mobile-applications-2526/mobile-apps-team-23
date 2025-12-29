@@ -1,12 +1,14 @@
 import {
   KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   StyleProp,
   ViewStyle,
 } from "react-native";
 import { ReactNode } from "react";
 import { Icon } from "@rneui/themed";
+import { HEADER_HEIGHT } from "@/constants/ui";
 
 export default function BaseDialog({
   open,
@@ -35,7 +37,11 @@ export default function BaseDialog({
       statusBarTranslucent
       onRequestClose={onClose}
     >
-      <KeyboardAvoidingView style={{ flex: 1 }} behavior="padding">
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={HEADER_HEIGHT}
+      >
         <Pressable
           style={{
             flex: 1,

@@ -32,6 +32,7 @@ export default function HomeHeader({
     color?: string,
   ) => (
     <Button
+      key={`${status}-${homeStatus === status}`}
       type={homeStatus === status ? "solid" : "clear"}
       onPress={onPress}
       containerStyle={{
