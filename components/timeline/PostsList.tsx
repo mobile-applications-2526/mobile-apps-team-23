@@ -159,6 +159,13 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
                       latitude: post.latitude,
                       longitude: post.longitude,
                     }}
+                    title={
+                      post.title
+                        ? post.title.length > 16
+                          ? `${post.title.slice(0, 16)}...`
+                          : post.title
+                        : "No Title"
+                    }
                     description={
                       post.description
                         ? post.description.length > 64
