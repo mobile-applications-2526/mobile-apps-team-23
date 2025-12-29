@@ -77,14 +77,12 @@ export default function PrivateMessageList({
           pressed && { opacity: 0.8 }, // Visual feedback while holding
         ]}
       >
-        <Text
-          style={[styles.senderName, { color: isReceived ? "#000" : "#fff" }]}
-        >
+        <Text style={[styles.senderName, { color: "white" }]}>
           {isReceived ? (friend?.name ? friend?.name : "Friend") : "You"}
         </Text>
         <Text
           style={{
-            color: isReceived ? "#000" : "#fff",
+            color: "white",
             fontSize: (() => {
               const content = item.content ?? "";
               const cleaned = content
@@ -103,7 +101,9 @@ export default function PrivateMessageList({
           <Text
             style={[
               styles.timestamp,
-              { color: isReceived ? "#888" : "rgba(255,255,255,0.8)" },
+              {
+                color: "rgba(255,255,255,0.75)",
+              },
             ]}
           >
             {item.created_at ? dayjs(item.created_at).fromNow() : ""}
@@ -115,7 +115,7 @@ export default function PrivateMessageList({
                 {
                   fontStyle: "italic",
                   marginLeft: 4,
-                  color: isReceived ? "#888" : "rgba(255,255,255,0.8)",
+                  color: "rgba(255,255,255,0.75)",
                 },
               ]}
             >
@@ -128,7 +128,7 @@ export default function PrivateMessageList({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={{ flex: 1 }}>
       <FlatList
         ref={flatListRef}
         data={privateMessages}
@@ -141,20 +141,22 @@ export default function PrivateMessageList({
         }
         // Dismiss keyboard when dragging the list
         keyboardDismissMode="on-drag"
+        // Improve performance for large lists
+        windowSize={10}
+        initialNumToRender={20}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, paddingHorizontal: 12 }, // Flex 1 ensures it takes available space
   messageBubble: {
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginVertical: 4,
     borderRadius: 6,
   },
-  receivedBubble: { alignSelf: "flex-start", backgroundColor: "#ffffff" },
+  receivedBubble: { alignSelf: "flex-start", backgroundColor: "#25D366" },
   sentBubble: { alignSelf: "flex-end", backgroundColor: "#0b93f6" },
   senderName: { fontWeight: "bold", marginBottom: 4, fontSize: 14 },
   timestamp: { fontSize: 10, marginTop: 4 },
