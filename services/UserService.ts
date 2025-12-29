@@ -18,6 +18,23 @@ const getOwnUserinfo = async (): Promise<Userinfo> => {
   return data;
 };
 
+const updateOwnUserinfo = async (userinfo: Userinfo): Promise<Userinfo> => {
+  const user = await getAuth();
+
+  const { data, error } = await supabase
+    .from("userinfo")
+    .update(userinfo)
+    .eq("id", user.id)
+    .single();
+
+  if (error) {
+    const message = `Failed to update user info: ${error.message || "Unknown Supabase error"}`;
+    throw new Error(message);
+  }
+
+  return data;
+};
+
 const getUserinfoById = async (userId: string): Promise<Userinfo> => {
   await getAuth();
 
@@ -37,6 +54,7 @@ const getUserinfoById = async (userId: string): Promise<Userinfo> => {
 
 const UserService = {
   getOwnUserinfo,
+  updateOwnUserinfo,
   getUserinfoById,
 };
 

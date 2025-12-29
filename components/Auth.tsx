@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Alert, StyleSheet, View, AppState } from "react-native";
-import { supabase } from "../utils/supabase";
+import { supabase } from "@/utils/supabase";
 import { Button, Input } from "@rneui/themed";
+import UserService from "@/services/UserService";
 
 AppState.addEventListener("change", (state) => {
   if (state === "active") {
@@ -14,6 +15,7 @@ AppState.addEventListener("change", (state) => {
 export default function Auth() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
   const [loading, setLoading] = useState(false);
 
   async function signInWithEmail() {
@@ -29,6 +31,8 @@ export default function Auth() {
 
   async function signUpWithEmail() {
     setLoading(true);
+
+    // Sign up the user
     const {
       data: { session },
       error,
@@ -40,6 +44,19 @@ export default function Auth() {
     if (error) Alert.alert(error.message);
     if (!session)
       Alert.alert("Please check your inbox for email verification!");
+
+    // Try to update the user's name if provided
+    if (name && session?.user) {
+      try {
+        await UserService.updateOwnUserinfo({
+          id: session.user.id,
+          name: name,
+        });
+      } catch (updateError: any) {
+        console.error("Error updating user info:", updateError);
+      }
+    }
+
     setLoading(false);
   }
 
@@ -64,6 +81,15 @@ export default function Auth() {
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={"none"}
+        />
+      </View>
+      <View style={styles.verticallySpaced}>
+        <Input
+          label="Name (optional)"
+          leftIcon={{ type: "font-awesome", name: "user" }}
+          onChangeText={(text) => setName(text)}
+          value={name}
+          placeholder="Your Name"
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
