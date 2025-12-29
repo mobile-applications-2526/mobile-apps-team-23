@@ -1,6 +1,6 @@
 import MapView, { Marker } from "react-native-maps";
 import { useEffect, useRef, useState } from "react";
-import { View, Button, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Platform } from "react-native";
 import * as Location from "expo-location";
 import { supabase } from "../utils/supabase";
 import { Button } from "@rneui/themed";
@@ -154,6 +154,7 @@ export default function MapScreen() {
           style={styles.map}
           showsUserLocation
           followsUserLocation={false}
+          showsMyLocationButton
         >
           {locations
             .filter((loc) => loc.user_id !== userId)
@@ -164,26 +165,19 @@ export default function MapScreen() {
                   latitude: loc.latitude,
                   longitude: loc.longitude,
                 }}
-              >
-                <View style={{ alignItems: "center" }}>
-                  <View style={styles.nameBubble}>
-                    <Text style={styles.nameText}>
-                      {loc.userinfo?.name ?? "Onbekend"}
-                    </Text>
-                  </View>
-                  <View style={styles.pin} />
-                </View>
-              </Marker>
+                title={loc.userinfo?.name || "Unknown"}
                 description={
                   loc.updated_at ? dayjs(loc.updated_at).fromNow() : ""
                 }
+              />
             ))}
         </MapView>
       </View>
-
-      <View style={styles.buttonContainer}>
-        <Button title="Mijn locatie" onPress={goToUserLocation} />
-      </View>
+      {Platform.OS === "ios" && (
+        <View style={styles.buttonContainer}>
+          <Button title="My location" onPress={goToUserLocation} />
+        </View>
+      )}
     </View>
   );
 }
@@ -191,32 +185,25 @@ export default function MapScreen() {
 const styles = StyleSheet.create({
   buttonContainer: {
     position: "absolute",
-    bottom: 20,
-    right: 20,
-    width: 130,
+    bottom: 16,
+    right: 16,
     borderRadius: 8,
     overflow: "hidden",
   },
   mapContainer: {
     flex: 1,
     borderRadius: 12,
-    overflow: "hidden", // required to clip the native map on Android
+    overflow: "hidden",
   },
   map: {
     flex: 1,
-    borderRadius: 12, // helps on iOS
-  },
-  nameBubble: {
-    backgroundColor: "white",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 6,
-    marginBottom: 4,
-    elevation: 2,
+    borderRadius: 12,
   },
   nameText: {
     fontWeight: "600",
     fontSize: 12,
+    includeFontPadding: false, // Remove extra space at the bottom
+    textAlignVertical: "center", // Ensure it stays centered vertically
   },
   pin: {
     width: 10,
