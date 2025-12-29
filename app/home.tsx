@@ -1,7 +1,7 @@
 import { View } from "react-native";
 import { useRouter } from "expo-router";
 import { useAuth } from "@/hooks/auth/useAuth";
-import HomeContent from "@/components/HomeContent";
+import HomeContent from "@/components/home/HomeContent";
 
 export default function Home() {
   const router = useRouter();
