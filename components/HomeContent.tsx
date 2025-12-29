@@ -23,7 +23,6 @@ export default function HomeContent({ router }: { router: Router }) {
         }}
       >
         <Button
-          title="Friends"
           type={isTimeline ? "outline" : "solid"}
           onPress={() => setIsTimeline(false)}
           containerStyle={{ flex: 1, marginRight: 6 }}
@@ -35,7 +34,17 @@ export default function HomeContent({ router }: { router: Router }) {
           }}
         />
         <Button
-          title="Timeline"
+          type="outline"
+          onPress={() => {}}
+          containerStyle={{ flex: 1, marginHorizontal: 6 }}
+          buttonStyle={{ borderRadius: 12 }}
+          icon={{
+            name: "map-marker",
+            type: "font-awesome",
+            color: "#2089dc",
+          }}
+        />
+        <Button
           type={isTimeline ? "solid" : "outline"}
           onPress={() => setIsTimeline(true)}
           containerStyle={{ flex: 1, marginLeft: 6 }}
@@ -44,6 +53,17 @@ export default function HomeContent({ router }: { router: Router }) {
             name: "comments",
             type: "font-awesome",
             color: isTimeline ? "#ffffff" : "#2089dc",
+          }}
+        />
+        <Button
+          type="outline"
+          onPress={() => {}}
+          containerStyle={{ flex: 1, marginLeft: 6 }}
+          buttonStyle={{ borderRadius: 12 }}
+          icon={{
+            name: "cog",
+            type: "font-awesome",
+            color: "#2089dc",
           }}
         />
       </View>
@@ -64,14 +84,7 @@ export default function HomeContent({ router }: { router: Router }) {
       )}
       {isTimeline && (
         <SafeAreaView style={{ flex: 1 }}>
-          <ScrollView
-            style={{
-              flex: 1,
-            }}
-            contentContainerStyle={{ flexGrow: 1 }}
-          >
-            <PostsList />
-          </ScrollView>
+          <PostsList />
           <PostCreateButton
             router={router}
             containerStyle={{ marginTop: 12 }}
