@@ -7,6 +7,9 @@ import DynamicImage from "@/components/DynamicImage";
 import { useEffect, useState } from "react";
 import UserService from "@/services/UserService";
 import MapView, { Marker } from "react-native-maps";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
   const [ownUserInfo, setOwnUserInfo] = useState<Userinfo | null>(null);
@@ -180,7 +183,7 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
         >
           {post.created_at ? (
             <Text style={{ fontSize: 12, color: "#888" }}>
-              {new Date(post.created_at).toLocaleString()}
+              {dayjs(post.created_at).fromNow()}
             </Text>
           ) : (
             <View />
