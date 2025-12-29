@@ -7,6 +7,7 @@ import {
   Platform,
   SafeAreaView,
   Text,
+  View,
 } from "react-native";
 import { useEffect, useState } from "react";
 import SendBox from "@/components/privateMessages/InputBoxes/SendBox";
@@ -52,7 +53,7 @@ export default function PrivateMessages() {
   }, [friendId]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#f2f2f2" }}>
+    <View style={{ flex: 1, backgroundColor: "#f2f2f2" }}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1, padding: 12 }}
@@ -81,6 +82,6 @@ export default function PrivateMessages() {
           />
         )}
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
