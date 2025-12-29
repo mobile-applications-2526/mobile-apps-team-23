@@ -35,7 +35,7 @@ export default function HomeContent({ router }: { router: Router }) {
         />
         <Button
           type="outline"
-          onPress={() => {}}
+          onPress={() => router.push("/map")}
           containerStyle={{ flex: 1, marginHorizontal: 6 }}
           buttonStyle={{ borderRadius: 12 }}
           icon={{
