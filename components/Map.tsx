@@ -4,8 +4,19 @@ import { View, Button, StyleSheet, Text } from "react-native";
 import * as Location from "expo-location";
 import { supabase } from "../utils/supabase";
 
+// TypeScript type voor locatie
+type LocationItem = {
+  user_id: string;
+  latitude: number;
+  longitude: number;
+  updated_at?: string;
+  userinfo?: {
+    name?: string;
+  };
+};
+
 export default function MapScreen() {
-  const [locations, setLocations] = useState<any[]>([]);
+  const [locations, setLocations] = useState<LocationItem[]>([]);
   const [userLocation, setUserLocation] =
     useState<Location.LocationObject | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -13,17 +24,12 @@ export default function MapScreen() {
   const mapRef = useRef<MapView>(null);
   const locationSub = useRef<Location.LocationSubscription | null>(null);
 
-  /**
-   * Init: wacht op login
-   */
   useEffect(() => {
     const init = async () => {
       const { data } = await supabase.auth.getSession();
-
       if (!data.session) return;
 
       setUserId(data.session.user.id);
-
       fetchLocations();
       startTracking();
     };
@@ -35,9 +41,6 @@ export default function MapScreen() {
     };
   }, []);
 
-  /**
-   * Realtime updates
-   */
   useEffect(() => {
     const channel = supabase
       .channel("locations-realtime")
@@ -47,23 +50,20 @@ export default function MapScreen() {
         (payload) => {
           if (!payload.new) return;
 
-          setLocations((prev) => {
-            const existing = prev.find(
-              (l) => l.user_id === payload.new.user_id
-            );
+          setLocations((prev: LocationItem[]) => {
+            const newLoc = payload.new as LocationItem; // cast payload naar LocationItem
+            const existing = prev.find((l) => l.user_id === newLoc.user_id);
 
             if (existing) {
               return prev.map((l) =>
-                l.user_id === payload.new.user_id
-                  ? { ...payload.new, userinfo: existing.userinfo }
+                l.user_id === newLoc.user_id
+                  ? { ...newLoc, userinfo: existing.userinfo } // nu is type correct
                   : l
               );
             }
 
-
-            return [...prev, payload.new];
+            return [...prev, newLoc];
           });
-
         }
       )
       .subscribe();
@@ -73,13 +73,8 @@ export default function MapScreen() {
     };
   }, []);
 
-  /**
-   * Fetch locations + profielnaam
-   */
   async function fetchLocations() {
-    const { data, error } = await supabase
-      .from("locations")
-      .select(`
+    const { data, error } = await supabase.from("locations").select(`
         user_id,
         latitude,
         longitude,
@@ -94,28 +89,20 @@ export default function MapScreen() {
       return;
     }
 
-    setLocations(data ?? []);
+    setLocations((data as LocationItem[]) ?? []);
   }
 
-  /**
-   * Start location tracking
-   */
   async function startTracking() {
-    const { status } =
-      await Location.requestForegroundPermissionsAsync();
-
+    const { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") return;
 
     const { data: authData } = await supabase.auth.getUser();
     const user = authData.user;
-
     if (!user) return;
 
-    const initial =
-      await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.High,
-      });
-
+    const initial = await Location.getCurrentPositionAsync({
+      accuracy: Location.Accuracy.High,
+    });
     setUserLocation(initial);
 
     mapRef.current?.animateCamera({
@@ -126,23 +113,18 @@ export default function MapScreen() {
       zoom: 16,
     });
 
-    locationSub.current =
-      await Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.High,
-          distanceInterval: 5,
-        },
-        async (loc) => {
-          setUserLocation(loc);
-
-          await supabase.from("locations").upsert({
-            user_id: user.id,
-            latitude: loc.coords.latitude,
-            longitude: loc.coords.longitude,
-            updated_at: new Date().toISOString(),
-          });
-        }
-      );
+    locationSub.current = await Location.watchPositionAsync(
+      { accuracy: Location.Accuracy.High, distanceInterval: 5 },
+      async (loc) => {
+        setUserLocation(loc);
+        await supabase.from("locations").upsert({
+          user_id: user.id,
+          latitude: loc.coords.latitude,
+          longitude: loc.coords.longitude,
+          updated_at: new Date().toISOString(),
+        });
+      }
+    );
   }
 
   function goToUserLocation() {
@@ -165,23 +147,18 @@ export default function MapScreen() {
         showsUserLocation
         followsUserLocation={false}
       >
-        {/* Alleen vrienden tonen */}
         {locations
           .filter((loc) => loc.user_id !== userId)
           .map((loc) => (
             <Marker
               key={loc.user_id}
-              coordinate={{
-                latitude: loc.latitude,
-                longitude: loc.longitude,
-              }}
+              coordinate={{ latitude: loc.latitude, longitude: loc.longitude }}
             >
               <View style={{ alignItems: "center" }}>
-                {/* Naam BOVEN de locatie */}
                 <View style={styles.nameBubble}>
                   <Text style={styles.nameText}>
-                     {loc.userinfo?.name ?? "Onbekend"}
-                   </Text>
+                    {loc.userinfo?.name ?? "Onbekend"}
+                  </Text>
                 </View>
                 <View style={styles.pin} />
               </View>
