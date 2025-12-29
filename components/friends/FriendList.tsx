@@ -1,7 +1,7 @@
 import useSWR, { mutate } from "swr";
 import FriendService from "@/services/FriendService";
 import { StyleProp, Text, View, ViewStyle } from "react-native";
-import { Button } from "@rneui/themed";
+import { Icon } from "@rneui/themed";
 import { Userinfo } from "@/types/models";
 import { Router } from "expo-router";
 
@@ -68,45 +68,36 @@ export default function FriendList({
               {friend.name}
             </Text>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Button
+              <Icon
                 containerStyle={{
                   width: 48,
-                }}
-                buttonStyle={{
                   height: 48,
                   borderRadius: 24,
-                  padding: 0,
                   alignItems: "center",
                   justifyContent: "center",
+                  backgroundColor: "#6dac60",
                 }}
                 onPress={() => onFriendMessage(friend.id!)}
-                icon={{
-                  type: "font-awesome",
-                  name: "comments",
-                  color: "#ffffff",
-                  size: 16,
-                }}
+                type="font-awesome"
+                name="comments"
+                size={16}
+                color="#ffffff"
               />
-              <Button
+              <Icon
                 containerStyle={{
                   width: 48,
-                  marginLeft: 8,
-                }}
-                buttonStyle={{
                   height: 48,
                   borderRadius: 24,
-                  padding: 0,
+                  marginLeft: 8,
                   alignItems: "center",
                   justifyContent: "center",
                   backgroundColor: "#d9534f",
                 }}
                 onPress={() => onFriendRemove(friend.id!)}
-                icon={{
-                  type: "font-awesome",
-                  name: "user-times",
-                  size: 16,
-                  color: "#ffffff",
-                }}
+                type="font-awesome"
+                name="user-times"
+                size={16}
+                color="#ffffff"
               />
             </View>
           </View>
