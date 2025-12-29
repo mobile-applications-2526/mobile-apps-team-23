@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View } from "react-native";
 import BaseDialog from "@/components/dialogs/BaseDialog";
 
 export default function ErrorDialog({
