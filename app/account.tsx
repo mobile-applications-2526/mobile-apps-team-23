@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/auth/useAuth";
 import FriendList from "@/components/friends/FriendList";
 import FriendRequestList from "@/components/friends/FriendRequestList";
 import AddFriendButton from "@/components/friends/AddFriendButton";
-import LogoutButton from "@/components/LogoutButton";
+import LogoutButton from "@/components/settings/LogoutButton";
 import { useRouter } from "expo-router";
 
 export default function AccountScreen() {

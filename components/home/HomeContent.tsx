@@ -14,7 +14,7 @@ export enum HomeStatus {
 }
 
 export default function HomeContent({ router }: { router: Router }) {
-  const [homeStatus, setHomeStatus] = useState<HomeStatus>(HomeStatus.FRIENDS);
+  const [homeStatus, setHomeStatus] = useState<HomeStatus>(HomeStatus.TIMELINE);
 
   return (
     <>
