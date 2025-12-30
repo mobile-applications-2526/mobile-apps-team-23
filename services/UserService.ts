@@ -11,7 +11,9 @@ const getOwnUserinfo = async (): Promise<Userinfo> => {
     .single();
 
   if (error) {
-    const message = `Failed to fetch user info: ${error.message || "Unknown Supabase error"}`;
+    const message = `Failed to fetch user info: ${
+      error.message || "Unknown Supabase error"
+    }`;
     throw new Error(message);
   }
 
@@ -28,16 +30,40 @@ const getUserinfoById = async (userId: string): Promise<Userinfo> => {
     .single();
 
   if (error) {
-    const message = `Failed to fetch user info by ID: ${error.message || "Unknown Supabase error"}`;
+    const message = `Failed to fetch user info by ID: ${
+      error.message || "Unknown Supabase error"
+    }`;
     throw new Error(message);
   }
 
   return data;
 };
 
+const getUsersByIds = async (userIds: string[]): Promise<Userinfo[]> => {
+  await getAuth();
+
+  const uniqueIds = Array.from(new Set(userIds.filter(Boolean)));
+  if (uniqueIds.length === 0) return [];
+
+  const { data, error } = await supabase
+    .from("userinfo")
+    .select("*")
+    .in("id", uniqueIds);
+
+  if (error) {
+    const message = `Failed to fetch users by IDs: ${
+      error.message || "Unknown Supabase error"
+    }`;
+    throw new Error(message);
+  }
+
+  return data ?? [];
+};
+
 const UserService = {
   getOwnUserinfo,
   getUserinfoById,
+  getUsersByIds,
 };
 
 export default UserService;

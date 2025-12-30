@@ -10,7 +10,10 @@ export default function SendBox({
   const [content, setContent] = useState("");
 
   const onButtonPress = () => {
-    PrivateMessageService.sendPrivateMessage(friendId!, content)
+    if (!friendId) return;
+    if (!content.trim()) return;
+
+    PrivateMessageService.sendPrivateMessage(friendId, content.trim())
       .then(() => {
         setContent("");
       })
