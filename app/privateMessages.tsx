@@ -139,27 +139,29 @@ export default function PrivateMessages() {
         style={{ flex: 1, padding: 12 }}
         keyboardVerticalOffset={HEADER_HEIGHT}
       >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginVertical: 20,
-            paddingHorizontal: 22,
-          }}
-        >
-          <Text
+        {!friendId && (
+          <View
             style={{
-              fontSize: 28,
-              fontWeight: "bold",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginVertical: 20,
+              paddingHorizontal: 22,
             }}
           >
-            Private Messages
-          </Text>
-          <TouchableOpacity onPress={() => setIsSelectingFriend(true)}>
-            <Icon name="edit" type="font-awesome" color="#000" size={28} />
-          </TouchableOpacity>
-        </View>
+            <Text
+              style={{
+                fontSize: 28,
+                fontWeight: "bold",
+              }}
+            >
+              Private Messages
+            </Text>
+            <TouchableOpacity onPress={() => setIsSelectingFriend(true)}>
+              <Icon name="edit" type="font-awesome" color="#000" size={28} />
+            </TouchableOpacity>
+          </View>
+        )}
 
         {!friendId ? (
           <>
@@ -244,7 +246,7 @@ export default function PrivateMessages() {
           </>
         )}
 
-        {isSelectingFriend && (
+        {isSelectingFriend && !friendId && (
           <View
             style={{
               position: "absolute",

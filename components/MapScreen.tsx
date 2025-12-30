@@ -40,7 +40,9 @@ export default function MapScreen() {
 
   const mapRef = useRef<MapView>(null);
   const locationSub = useRef<Location.LocationSubscription | null>(null);
-  const markerRefs = useRef<Record<string, Marker | null>>({});
+  const markerRefs = useRef<
+    Record<string, { showCallout: () => void; hideCallout: () => void } | null>
+  >({});
   const suppressNextMarkerPress = useRef(false);
 
   useEffect(() => {
@@ -205,7 +207,9 @@ export default function MapScreen() {
             return (
               <Marker
                 key={`${loc.user_id}-${isZoomedIn}`}
-                ref={(ref) => (markerRefs.current[loc.user_id] = ref)}
+                ref={(ref) => {
+                  markerRefs.current[loc.user_id] = ref;
+                }}
                 coordinate={{
                   latitude: loc.latitude,
                   longitude: loc.longitude,
@@ -243,7 +247,7 @@ export default function MapScreen() {
                 </View>
 
                 <Callout
-                  tooltip
+                  tooltip={Platform.OS === "ios"}
                   onPress={() => {
                     suppressNextMarkerPress.current = true;
                     markerRefs.current[loc.user_id]?.hideCallout();
@@ -391,5 +395,12 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     marginBottom: 8,
     backgroundColor: "#eee",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 40,
+    left: 0,
+    right: 0,
+    alignItems: "center",
   },
 });
