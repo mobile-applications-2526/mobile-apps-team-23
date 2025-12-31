@@ -59,6 +59,7 @@ export default function BaseBox({
               : defaultColor,
         }}
         disabled={!allowEmptyContent && content.trim().length === 0}
+        testID="send-message-button"
         onPress={onButtonPress}
       />
     </View>

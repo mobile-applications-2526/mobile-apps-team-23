@@ -11,3 +11,19 @@ Then("I see the text {string}", (text: string) => {
 Then("I am on the home page", () => {
   cy.url().should("eq", `${Cypress.config().baseUrl}/home`);
 });
+
+Then("I am on the map page", () => {
+  cy.url().should("eq", `${Cypress.config().baseUrl}/map`);
+});
+
+Then("I am on the messages page", () => {
+  cy.url().should("eq", `${Cypress.config().baseUrl}/privateMessages`);
+});
+
+Then("I am on the account page", () => {
+  cy.url().should("eq", `${Cypress.config().baseUrl}/account`);
+});
+
+Then("I am on the settings page", () => {
+  cy.url().should("eq", `${Cypress.config().baseUrl}/settings`);
+});

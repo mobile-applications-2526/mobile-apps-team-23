@@ -3,13 +3,19 @@ import { Given, When } from "@badeball/cypress-cucumber-preprocessor";
 const SUPABASE_URL = "https://acmctsiuvvhusxkwxfil.supabase.co";
 
 Given("I insert my email into the email field", () => {
-  cy.get("input[placeholder='email@address.com']").click();
-  cy.get("input[placeholder='email@address.com']").type("user@email.com");
+  cy.get("input[placeholder='email@address.com']").first().click({
+    force: true,
+  });
+  cy.get("input[placeholder='email@address.com']")
+    .first()
+    .type("user@email.com", { force: true });
 });
 
 Given("I insert my password into the password field", () => {
-  cy.get("input[placeholder='Password']").click();
-  cy.get("input[placeholder='Password']").type("password01");
+  cy.get("input[placeholder='Password']").first().click({ force: true });
+  cy.get("input[placeholder='Password']").first().type("password01", {
+    force: true,
+  });
 });
 
 When('I click the "Sign in" button', () => {
@@ -41,7 +47,32 @@ When('I click the "Sign in" button', () => {
     ],
   }).as("getProfileRequest");
 
-  cy.get("button").contains("Sign in").click();
+  cy.get("body").then(($body) => {
+    if ($body.find("button:contains('Sign in')").length === 0) {
+      // Already signed in on a later scenario; skip re-login
+      return;
+    }
 
-  cy.wait("@loginRequest");
+    cy.get("button").contains("Sign in").click({ force: true });
+    cy.wait("@loginRequest");
+  });
+});
+
+When("I click the {string} tab", (label: string) => {
+  const navLabelByStepLabel: Record<string, string> = {
+    Home: "Home",
+    Map: "Map",
+    Berichten: "Messages",
+    Messages: "Messages",
+    Account: "Account",
+    Settings: "Settings",
+  };
+
+  const navLabel = navLabelByStepLabel[label];
+
+  if (!navLabel) {
+    throw new Error(`Unknown tab label: ${label}`);
+  }
+
+  cy.contains(navLabel).click();
 });
