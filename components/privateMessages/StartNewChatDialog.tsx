@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { Icon } from "@rneui/themed";
 import BaseDialog from "@/components/dialogs/BaseDialog";
 import type { Userinfo } from "@/types/models";
 
@@ -28,9 +27,9 @@ export default function StartNewChatDialog({
   const filteredFriends = useMemo(
     () =>
       friends.filter((f) =>
-        (f.name || "").toLowerCase().includes(search.toLowerCase())
+        (f.name || "").toLowerCase().includes(search.toLowerCase()),
       ),
-    [friends, search]
+    [friends, search],
   );
 
   return (
@@ -56,9 +55,6 @@ export default function StartNewChatDialog({
         >
           Start new chat
         </Text>
-        <TouchableOpacity onPress={onClose}>
-          <Icon name="close" type="font-awesome" color="#000" size={18} />
-        </TouchableOpacity>
       </View>
 
       <TextInput
@@ -87,6 +83,7 @@ export default function StartNewChatDialog({
               borderBottomWidth: 1,
               borderBottomColor: "#eee",
             }}
+            testID={`friend-item-${item.name}`}
           >
             <Text style={{ fontSize: 20 }}>{item.name}</Text>
           </TouchableOpacity>

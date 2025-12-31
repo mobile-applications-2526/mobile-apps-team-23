@@ -120,7 +120,7 @@ When("I open the new chat friend picker", () => {
 });
 
 When("I select the friend {string}", (friendName: string) => {
-  cy.contains(friendName).click();
+  cy.get(`[data-testid='friend-item-${friendName}']`).click({ force: true });
 });
 
 When("I send a private message {string}", (message: string) => {

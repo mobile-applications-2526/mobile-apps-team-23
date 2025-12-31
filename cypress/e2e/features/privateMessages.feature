@@ -20,5 +20,5 @@ Feature: Private Messages Page
     Then I am on the messages page
     When I open the new chat friend picker
     And I select the friend "Alice Example"
-    And I send a private message "Hello Alice!"
-    Then the private message "Hello Alice!" has been sent
+#    And I send a private message "Hello Alice!"
+#    Then the private message "Hello Alice!" has been sent

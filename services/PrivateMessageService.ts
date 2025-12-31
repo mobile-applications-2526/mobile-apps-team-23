@@ -13,7 +13,7 @@ const getPrivateMessages = async (friendId: string) => {
     .from("privatemessage")
     .select("*")
     .or(
-      `and(sender_id.eq.${user.id},receiver_id.eq.${friendId}),and(sender_id.eq.${friendId},receiver_id.eq.${user.id})`
+      `and(sender_id.eq.${user.id},receiver_id.eq.${friendId}),and(sender_id.eq.${friendId},receiver_id.eq.${user.id})`,
     )
     .order("created_at", { ascending: true }); // Oldest messages at top
 
@@ -21,7 +21,7 @@ const getPrivateMessages = async (friendId: string) => {
     throw new Error(
       `Failed to fetch private messages: ${
         error.message || JSON.stringify(error)
-      }`
+      }`,
     );
   }
 
@@ -43,13 +43,14 @@ const sendPrivateMessage = async (recipientId: string, content: string) => {
 
   const { data, error } = await supabase
     .from("privatemessage")
-    .insert([message]);
+    .insert([message])
+    .select();
 
   if (error) {
     throw new Error(
       `Failed to send private message: ${
         error.message || JSON.stringify(error)
-      }`
+      }`,
     );
   }
 
@@ -69,7 +70,7 @@ const getConversationSummaries = async (): Promise<ConversationSummary[]> => {
     throw new Error(
       `Failed to fetch conversation summaries: ${
         error.message || JSON.stringify(error)
-      }`
+      }`,
     );
   }
 
@@ -107,7 +108,7 @@ const editPrivateMessage = async (messageId: number, newContent: string) => {
     throw new Error(
       `Failed to edit private message: ${
         error.message || JSON.stringify(error)
-      }`
+      }`,
     );
   }
 
@@ -126,7 +127,7 @@ const deletePrivateMessage = async (messageId: number) => {
     throw new Error(
       `Failed to delete private message: ${
         error.message || JSON.stringify(error)
-      }`
+      }`,
     );
   }
 };

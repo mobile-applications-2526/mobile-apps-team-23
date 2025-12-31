@@ -12,6 +12,13 @@ export function useChatMessages(friendId: string, currentUserId: string) {
     if (!friendId) return;
     if (!currentUserId) return;
 
+    if ((window as any).Cypress) {
+      (window as any).triggerRealtimeMessage = (newMessage: PrivateMessage) => {
+        // This mimics exactly what happens when a WebSocket event arrives
+        setMessages((prev) => [...prev, newMessage]);
+      };
+    }
+
     const fetchHistory = async () => {
       try {
         const data = await PrivateMessageService.getPrivateMessages(friendId);
@@ -96,6 +103,9 @@ export function useChatMessages(friendId: string, currentUserId: string) {
 
     return () => {
       supabase.removeChannel(channel);
+      if ((window as any).Cypress) {
+        delete (window as any).triggerRealtimeMessage;
+      }
     };
   }, [friendId, currentUserId]);
 

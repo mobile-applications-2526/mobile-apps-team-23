@@ -13,7 +13,7 @@
     "lint": "expo lint",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run",
-    "test": "jest --watchAll",
+    "test": "jest",
     "eas-build-pre-install": "npm config set legacy-peer-deps true"
   },
   "dependencies": {

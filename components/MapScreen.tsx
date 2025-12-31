@@ -7,13 +7,13 @@ import {
   Platform,
   Button,
 } from "react-native";
-import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import { styles } from "./MapScreen.styles";
-import { LocationItem } from "../types/models";
+import { LocationItem } from "@/types/models";
 import FriendService from "../services/FriendService";
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "./NativeMap";
 
 export default function MapScreen() {
   const [locations, setLocations] = useState<LocationItem[]>([]);
@@ -39,7 +39,7 @@ export default function MapScreen() {
       setUserId(data.session.user.id);
       try {
         const friends = await FriendService.getMyFriends();
-        setFriendIds(friends.map((f) => f.id));
+        setFriendIds(friends.map((f) => f.id!));
       } catch (error) {
         console.error("Failed to fetch friends for map:", error);
       }
@@ -71,13 +71,13 @@ export default function MapScreen() {
               return prev.map((l) =>
                 l.user_id === newLoc.user_id
                   ? { ...newLoc, userinfo: existing.userinfo }
-                  : l
+                  : l,
               );
             }
 
             return [...prev, newLoc];
           });
-        }
+        },
       )
       .subscribe();
 
@@ -105,7 +105,7 @@ export default function MapScreen() {
             created_at
           )
         )
-      `
+      `,
       )
       .order("created_at", {
         foreignTable: "userinfo.posts",
@@ -141,7 +141,7 @@ export default function MapScreen() {
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
       },
-      500
+      500,
     );
 
     locationSub.current = await Location.watchPositionAsync(
@@ -154,7 +154,7 @@ export default function MapScreen() {
           longitude: loc.coords.longitude,
           updated_at: new Date().toISOString(),
         });
-      }
+      },
     );
   }
 
@@ -168,7 +168,7 @@ export default function MapScreen() {
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
       },
-      500
+      500,
     );
   }
 
@@ -193,7 +193,7 @@ export default function MapScreen() {
       >
         {locations
           .filter(
-            (loc) => loc.user_id !== userId && friendIds.includes(loc.user_id)
+            (loc) => loc.user_id !== userId && friendIds.includes(loc.user_id),
           )
           .map((loc) => {
             const latestPost = loc.userinfo?.posts?.[0];

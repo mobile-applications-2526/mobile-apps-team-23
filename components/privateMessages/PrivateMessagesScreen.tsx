@@ -27,7 +27,7 @@ export default function PrivateMessagesScreen() {
   const friendId = (searchParams?.friendId as string | undefined) ?? undefined;
   const router = useRouter();
   const [editingMessage, setEditingMessage] = useState<PrivateMessage | null>(
-    null
+    null,
   );
   const [ownUser, setOwnUser] = useState<Userinfo | null>(null);
   const [friend, setFriend] = useState<Userinfo | null>(null);
@@ -47,7 +47,7 @@ export default function PrivateMessagesScreen() {
         console.error("Failed to fetch own user info:", error);
         Alert.alert(
           "Error",
-          "Unable to load your user information. Some features may not work correctly."
+          "Unable to load your user information. Some features may not work correctly.",
         );
       });
   }, []);
@@ -123,6 +123,14 @@ export default function PrivateMessagesScreen() {
     setIsSelectingFriend(false);
   };
 
+  if (friendId && !ownUser) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <Text>Loading user profile...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: "#f2f2f2" }}>
       <KeyboardAvoidingView
@@ -147,7 +155,10 @@ export default function PrivateMessagesScreen() {
             >
               Private Messages
             </Text>
-            <TouchableOpacity onPress={() => setIsSelectingFriend(true)}>
+            <TouchableOpacity
+              onPress={() => setIsSelectingFriend(true)}
+              testID="new-chat-button"
+            >
               <Icon name="edit" type="font-awesome" color="#000" size={28} />
             </TouchableOpacity>
           </View>
