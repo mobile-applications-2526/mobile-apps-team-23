@@ -7,6 +7,7 @@ import {
   Platform,
   Button,
 } from "react-native";
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
