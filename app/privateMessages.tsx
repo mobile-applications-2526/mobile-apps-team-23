@@ -120,7 +120,7 @@ export default function PrivateMessages() {
   }, [isSelectingFriend]);
 
   const openChatWithFriend = (targetFriendId: string) => {
-    router.push({
+    router.replace({
       pathname: "/privateMessages",
       params: { friendId: targetFriendId },
     });
@@ -144,8 +144,7 @@ export default function PrivateMessages() {
               flexDirection: "row",
               alignItems: "center",
               justifyContent: "space-between",
-              marginVertical: 20,
-              paddingHorizontal: 22,
+              padding: 12,
             }}
           >
             <Text
@@ -264,7 +263,7 @@ export default function PrivateMessages() {
                 maxHeight: "80%",
                 backgroundColor: "#fff",
                 borderRadius: 12,
-                padding: 24,
+                padding: 12,
               }}
             >
               <View
