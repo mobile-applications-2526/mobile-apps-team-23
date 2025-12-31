@@ -1,9 +1,4 @@
-import {
-  Keyboard,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  View,
-} from "react-native";
+import { Keyboard, TouchableWithoutFeedback, View } from "react-native";
 import { Router, useRouter } from "expo-router";
 import PostCreateContent from "@/components/timeline/create/PostCreateContent";
 

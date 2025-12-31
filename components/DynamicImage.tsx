@@ -6,7 +6,7 @@ const DynamicImage = ({
   style,
 }: {
   uri: string;
-  style: StyleProp<ImageStyle>;
+  style?: StyleProp<ImageStyle>;
 }) => {
   return (
     <Image

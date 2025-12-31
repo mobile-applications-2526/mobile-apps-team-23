@@ -4,7 +4,7 @@ import { View } from "react-native";
 import * as Notifications from "expo-notifications";
 import { getAuth, supabase } from "@/utils/supabase";
 import { User } from "@supabase/auth-js";
-import BottomNav from "@/components/BottomNav";
+import BottomNav from "@/components/navBar/BottomNav";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -54,7 +54,7 @@ export default function RootLayout() {
             },
             trigger: null,
           });
-        }
+        },
       )
       .subscribe();
 
@@ -68,7 +68,7 @@ export default function RootLayout() {
             params: { friendId: friendId as string },
           });
         }
-      }
+      },
     );
 
     return () => {
@@ -80,7 +80,7 @@ export default function RootLayout() {
   return (
     <View style={{ flex: 1 }}>
       <View style={{ flex: 1 }}>
-        <Stack />
+        <Stack screenOptions={{ animation: "fade" }} />
       </View>
       {user && <BottomNav />}
     </View>

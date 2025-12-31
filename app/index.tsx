@@ -6,10 +6,8 @@ export default function Index() {
   useUnAuth();
 
   return (
-    <>
-      <View>
-        <Auth />
-      </View>
-    </>
+    <View>
+      <Auth />
+    </View>
   );
 }

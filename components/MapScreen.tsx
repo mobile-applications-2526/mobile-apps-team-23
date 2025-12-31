@@ -4,16 +4,30 @@ import {
   View,
   StyleSheet,
   Text,
-  Image,
   TouchableOpacity,
   Platform,
-  Button,
 } from "react-native";
 import * as Location from "expo-location";
 import { supabase } from "../utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
-import {LocationItem} from "../types/models.ts"
-import { styles } from "./MapScreen.styles";
+import DynamicImage from "@/components/DynamicImage";
+
+type LocationItem = {
+  user_id: string;
+  latitude: number;
+  longitude: number;
+  updated_at?: string;
+  userinfo?: {
+    name?: string;
+    posts?: {
+      id: number;
+      title: string | null;
+      description: string | null;
+      image_url: string | null;
+      created_at: string;
+    }[];
+  };
+};
 
 export default function MapScreen() {
   const [locations, setLocations] = useState<LocationItem[]>([]);
@@ -64,13 +78,13 @@ export default function MapScreen() {
               return prev.map((l) =>
                 l.user_id === newLoc.user_id
                   ? { ...newLoc, userinfo: existing.userinfo }
-                  : l
+                  : l,
               );
             }
 
             return [...prev, newLoc];
           });
-        }
+        },
       )
       .subscribe();
 
@@ -98,7 +112,7 @@ export default function MapScreen() {
             created_at
           )
         )
-      `
+      `,
       )
       .order("created_at", {
         foreignTable: "userinfo.posts",
@@ -134,7 +148,7 @@ export default function MapScreen() {
         latitudeDelta: 0.02,
         longitudeDelta: 0.02,
       },
-      500
+      500,
     );
 
     locationSub.current = await Location.watchPositionAsync(
@@ -147,7 +161,7 @@ export default function MapScreen() {
           longitude: loc.coords.longitude,
           updated_at: new Date().toISOString(),
         });
-      }
+      },
     );
   }
 
@@ -158,10 +172,10 @@ export default function MapScreen() {
       {
         latitude: userLocation.coords.latitude,
         longitude: userLocation.coords.longitude,
-        latitudeDelta: 0.02,
-        longitudeDelta: 0.02,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
       },
-      500
+      500,
     );
   }
 
@@ -179,6 +193,7 @@ export default function MapScreen() {
         provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
         showsUserLocation
+        showsMyLocationButton={false}
         onPress={closeOpenPopup}
         onRegionChangeComplete={(region) =>
           setIsZoomedIn(region.latitudeDelta <= 0.05)
@@ -246,21 +261,32 @@ export default function MapScreen() {
 
                     {latestPost ? (
                       <>
-                        {latestPost.image_url && (
-                          <Image
-                            source={{ uri: latestPost.image_url }}
-                            style={styles.calloutImage}
-                          />
-                        )}
+                        <Text
+                          style={{
+                            fontWeight: "600",
+                            marginBottom: 4,
+                            fontSize: 14,
+                            fontStyle: "italic",
+                          }}
+                        >
+                          Latest post
+                        </Text>
                         {latestPost.title && (
                           <Text style={styles.calloutTitle}>
-                            {latestPost.title}
+                            {latestPost.title.length > 20
+                              ? `${latestPost.title.slice(0, 20 - 3)}...`
+                              : latestPost.title}
                           </Text>
                         )}
                         {latestPost.description && (
                           <Text style={styles.calloutDescription}>
-                            {latestPost.description}
+                            {latestPost.description.length > 100
+                              ? `${latestPost.description.slice(0, 100 - 3)}...`
+                              : latestPost.description}
                           </Text>
+                        )}
+                        {latestPost.image_url && (
+                          <DynamicImage uri={latestPost.image_url} />
                         )}
                       </>
                     ) : (
@@ -285,11 +311,87 @@ export default function MapScreen() {
           <Ionicons name="location-outline" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
-      {Platform.OS === "ios" && (
-        <View style={styles.buttonContainer}>
-          <Button title="My location" onPress={goToUserLocation} />
-        </View>
-      )}
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  fabContainer: {
+    position: "absolute",
+    bottom: 30,
+    right: 20,
+    elevation: 6,
+  },
+  fabButton: {
+    backgroundColor: "#2ecc71",
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+  },
+  friendMarkerContainer: {
+    alignItems: "center",
+    elevation: 4,
+  },
+  friendNameBubble: {
+    backgroundColor: "rgba(255,255,255,0.95)",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginBottom: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+  },
+  friendNameText: {
+    fontSize: 13,
+    fontWeight: "600",
+  },
+  friendDotWrapper: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "white",
+    alignItems: "center",
+    justifyContent: "center",
+    elevation: 4,
+  },
+  friendDot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#2ecc71",
+  },
+  callout: {
+    width: 240,
+    backgroundColor: "white",
+    padding: 14,
+    borderRadius: 16,
+    elevation: 6,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+  },
+  calloutName: {
+    fontWeight: "700",
+    fontSize: 16,
+    marginBottom: 6,
+  },
+  calloutTitle: {
+    fontWeight: "600",
+    marginBottom: 4,
+    fontSize: 14,
+  },
+  calloutDescription: {
+    fontSize: 13,
+    color: "#555",
+    marginBottom: 6,
+  },
+});

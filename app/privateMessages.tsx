@@ -6,7 +6,6 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -29,7 +28,7 @@ export default function PrivateMessages() {
   const friendId = (searchParams?.friendId as string | undefined) ?? undefined;
   const router = useRouter();
   const [editingMessage, setEditingMessage] = useState<PrivateMessage | null>(
-    null
+    null,
   );
   const [ownUser, setOwnUser] = useState<Userinfo | null>(null);
   const [friend, setFriend] = useState<Userinfo | null>(null);
@@ -52,7 +51,7 @@ export default function PrivateMessages() {
         console.error("Failed to fetch own user info:", error);
         Alert.alert(
           "Error",
-          "Unable to load your user information. Some features may not work correctly."
+          "Unable to load your user information. Some features may not work correctly.",
         );
       });
   }, []);
@@ -129,7 +128,7 @@ export default function PrivateMessages() {
   };
 
   const filteredFriends = friends.filter((f) =>
-    (f.name || "").toLowerCase().includes(friendSearch.toLowerCase())
+    (f.name || "").toLowerCase().includes(friendSearch.toLowerCase()),
   );
 
   return (

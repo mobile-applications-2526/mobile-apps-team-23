@@ -1,4 +1,4 @@
-import { SafeAreaView } from "react-native";
+import { View } from "react-native";
 import { useAuth } from "@/hooks/auth/useAuth";
 import MapScreen from "@/components/MapScreen";
 
@@ -8,8 +8,8 @@ export default function Map() {
   if (!initialized) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <View style={{ flex: 1, padding: 12 }}>
       <MapScreen />
-    </SafeAreaView>
+    </View>
   );
 }

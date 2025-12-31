@@ -1,20 +1,17 @@
 import { Router } from "expo-router";
-import { useState } from "react";
-import HomeHeader from "@/components/home/HomeHeader";
-import HomeFriendContent from "@/components/home/content/HomeFriendContent";
-import HomeTimelineContent from "@/components/home/content/HomeTimelineContent";
-import HomeMapContent from "@/components/home/content/HomeMapContent";
-import HomeSettingsContent from "@/components/home/content/HomeSettingsContent";
-
-export enum HomeStatus {
-  FRIENDS = "FRIENDS",
-  LIVE_MAP = "LIVE_MAP",
-  TIMELINE = "TIMELINE",
-  SETTINGS = "SETTINGS",
-}
+import { View } from "react-native";
+import PostsList from "@/components/timeline/PostsList";
+import PostCreateButton from "@/components/timeline/PostCreateButton";
 
 export default function HomeContent({ router }: { router: Router }) {
-  const [homeStatus, setHomeStatus] = useState<HomeStatus>(HomeStatus.TIMELINE);
-
-  return <HomeTimelineContent router={router} />;
+  return (
+    <View style={{ flex: 1 }}>
+      <PostsList />
+      <PostCreateButton
+        router={router}
+        containerStyle={{ marginTop: 12 }}
+        buttonStyle={{ borderRadius: 12 }}
+      />
+    </View>
+  );
 }
