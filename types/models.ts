@@ -9,21 +9,21 @@ export type Userinfo = {
 };
 
 export type LocationItem = {
-         user_id: string;
-         latitude: number;
-         longitude: number;
-         updated_at?: string;
-         userinfo?: {
-           name?: string;
-           posts?: {
-             id: number;
-             title: string | null;
-             description: string | null;
-             image_url: string | null;
-             created_at: string;
-           }[];
-         };
-       };
+  user_id: string;
+  latitude: number;
+  longitude: number;
+  updated_at?: string;
+  userinfo?: {
+    name?: string;
+    posts?: {
+      id: number;
+      title: string | null;
+      description: string | null;
+      image_url: string | null;
+      created_at: string;
+    }[];
+  };
+};
 
 export type Friendship = {
   id?: number;
