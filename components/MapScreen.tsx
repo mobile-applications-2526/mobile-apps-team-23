@@ -1,4 +1,3 @@
-import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "react-native-maps";
 import { useEffect, useRef, useState } from "react";
 import {
   View,
@@ -8,9 +7,10 @@ import {
   Platform,
 } from "react-native";
 import * as Location from "expo-location";
-import { supabase } from "../utils/supabase";
+import { supabase } from "@/utils/supabase";
 import { Ionicons } from "@expo/vector-icons";
 import DynamicImage from "@/components/DynamicImage";
+import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "./NativeMap";
 
 type LocationItem = {
   user_id: string;
