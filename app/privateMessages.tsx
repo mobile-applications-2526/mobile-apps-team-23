@@ -133,7 +133,10 @@ export default function PrivateMessages() {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#f2f2f2" }}>
+    <View
+      style={{ flex: 1, backgroundColor: "#f2f2f2" }}
+      testID="screen-messages"
+    >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1, padding: 12 }}

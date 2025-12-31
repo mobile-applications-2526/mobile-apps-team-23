@@ -4,21 +4,25 @@ import { Icon } from "@rneui/themed";
 
 const TABS = [
   {
+    id: "home",
     label: "Home",
     route: "/home" as const,
     icon: { name: "users", type: "font-awesome" as const },
   },
   {
+    id: "map",
     label: "Map",
     route: "/map" as const,
     icon: { name: "map-marker", type: "font-awesome" as const },
   },
   {
+    id: "messages",
     label: "Berichten",
     route: "/privateMessages" as const,
     icon: { name: "comments", type: "font-awesome" as const },
   },
   {
+    id: "account",
     label: "Account",
     route: "/account" as const,
     icon: { name: "user", type: "font-awesome" as const },
@@ -55,6 +59,7 @@ export default function BottomNav() {
             key={`${tab.route}-${tab.label}`}
             style={{ flex: 1, alignItems: "center" }}
             onPress={() => handlePress(tab.route)}
+            testID={`tab-${tab.id}`}
             activeOpacity={0.7}
           >
             <View

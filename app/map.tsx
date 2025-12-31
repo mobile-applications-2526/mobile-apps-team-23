@@ -8,7 +8,7 @@ export default function Map() {
   if (!initialized) return null;
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1 }} testID="screen-map">
       <MapScreen />
     </SafeAreaView>
   );

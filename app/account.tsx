@@ -23,6 +23,7 @@ export default function AccountScreen() {
         paddingBottom: padding,
         paddingTop: topPadding,
       }}
+      testID="screen-account"
     >
       <ScrollView>
         <FriendList router={router} style={{ marginTop: 16 }} />

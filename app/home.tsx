@@ -9,7 +9,7 @@ export default function Home() {
   useAuth();
 
   return (
-    <View style={{ padding: 12, height: "100%" }}>
+    <View style={{ padding: 12, height: "100%" }} testID="screen-home">
       <HomeContent router={router} />
     </View>
   );

@@ -70,6 +70,7 @@ export default function Auth() {
           value={email}
           placeholder="email@address.com"
           autoCapitalize={"none"}
+          testID="email"
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -81,6 +82,7 @@ export default function Auth() {
           secureTextEntry={true}
           placeholder="Password"
           autoCapitalize={"none"}
+          testID="password"
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -90,6 +92,7 @@ export default function Auth() {
           onChangeText={(text) => setName(text)}
           value={name}
           placeholder="Your Name"
+          testID="name"
         />
       </View>
       <View style={[styles.verticallySpaced, styles.mt20]}>
@@ -97,6 +100,7 @@ export default function Auth() {
           title="Sign in"
           disabled={loading}
           onPress={() => signInWithEmail()}
+          testID="login-button"
         />
       </View>
       <View style={styles.verticallySpaced}>
@@ -104,6 +108,7 @@ export default function Auth() {
           title="Sign up"
           disabled={loading}
           onPress={() => signUpWithEmail()}
+          testID="signup-button"
         />
       </View>
     </View>
