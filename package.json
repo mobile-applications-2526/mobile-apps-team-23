@@ -10,7 +10,9 @@
     "android:devclient": "expo run:android",
     "ios:devclient": "expo run:ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
@@ -54,7 +56,10 @@
     "swr": "^2.3.8"
   },
   "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^24.0.0",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.8",
     "@types/react": "~19.1.0",
+    "cypress": "^15.8.1",
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "typescript": "~5.9.2"

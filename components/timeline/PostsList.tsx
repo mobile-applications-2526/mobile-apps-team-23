@@ -6,9 +6,10 @@ import { Button } from "@rneui/themed";
 import DynamicImage from "@/components/DynamicImage";
 import { useEffect, useState } from "react";
 import UserService from "@/services/UserService";
-import MapView, { Marker } from "react-native-maps";
+import { Platform } from "react-native";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import MapView, { Marker } from "../NativeMap";
 dayjs.extend(relativeTime);
 
 export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
@@ -145,36 +146,42 @@ export default function PostsList({ style }: { style?: StyleProp<ViewStyle> }) {
 
             {isMapOpen(post.id) && (
               <View style={{ marginTop: 8 }}>
-                <MapView
-                  style={{ width: "100%", height: 200, borderRadius: 8 }}
-                  initialRegion={{
-                    latitude: post.latitude,
-                    longitude: post.longitude,
-                    latitudeDelta: 0.01,
-                    longitudeDelta: 0.01,
-                  }}
-                >
-                  <Marker
-                    coordinate={{
+                {Platform.OS !== "web" ? (
+                  <MapView
+                    style={{ width: "100%", height: 200, borderRadius: 8 }}
+                    initialRegion={{
                       latitude: post.latitude,
                       longitude: post.longitude,
+                      latitudeDelta: 0.01,
+                      longitudeDelta: 0.01,
                     }}
-                    title={
-                      post.title
-                        ? post.title.length > 16
-                          ? `${post.title.slice(0, 16)}...`
-                          : post.title
-                        : "No Title"
-                    }
-                    description={
-                      post.description
-                        ? post.description.length > 64
-                          ? `${post.description.slice(0, 64)}...`
-                          : post.description
-                        : undefined
-                    }
-                  />
-                </MapView>
+                  >
+                    <Marker
+                      coordinate={{
+                        latitude: post.latitude,
+                        longitude: post.longitude,
+                      }}
+                      title={
+                        post.title
+                          ? post.title.length > 16
+                            ? `${post.title.slice(0, 16)}...`
+                            : post.title
+                          : "No Title"
+                      }
+                      description={
+                        post.description
+                          ? post.description.length > 64
+                            ? `${post.description.slice(0, 64)}...`
+                            : post.description
+                          : undefined
+                      }
+                    />
+                  </MapView>
+                ) : (
+                  <Text style={{ fontStyle: "italic", color: "#888" }}>
+                    Map view is not supported on this platform.
+                  </Text>
+                )}
               </View>
             )}
           </View>

@@ -22,6 +22,7 @@ export default function PostCreateTitleAndContentInputs({
             fontSize: 18,
           },
         ]}
+        testID="post-title-input"
         onChangeText={(title) => setTitle(title)}
       />
 
@@ -39,6 +40,7 @@ export default function PostCreateTitleAndContentInputs({
             fontSize: 16,
           },
         ]}
+        testID="post-content-input"
         onChangeText={(content) => setContent(content)}
       />
     </View>
