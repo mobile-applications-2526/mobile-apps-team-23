@@ -14,6 +14,9 @@ import { styles } from "./MapScreen.styles";
 import { LocationItem } from "@/types/models";
 import FriendService from "../services/FriendService";
 import MapView, { Marker, Callout, PROVIDER_GOOGLE } from "./NativeMap";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+dayjs.extend(relativeTime);
 
 export default function MapScreen() {
   const [locations, setLocations] = useState<LocationItem[]>([]);
@@ -227,58 +230,60 @@ export default function MapScreen() {
                   }
                 }}
               >
-                <View style={styles.friendMarkerContainer}>
-                  {isZoomedIn && (
-                    <View style={styles.friendNameBubble}>
-                      <Text style={styles.friendNameText}>
-                        {loc.userinfo?.name ?? "Onbekend"}
-                      </Text>
-                    </View>
-                  )}
-                  <View style={styles.friendDotWrapper}>
-                    <View style={styles.friendDot} />
-                  </View>
-                </View>
-
-                <Callout
-                  tooltip={Platform.OS === "ios"}
-                  onPress={() => {
-                    suppressNextMarkerPress.current = true;
-                    markerRefs.current[loc.user_id]?.hideCallout();
-                    setOpenMarkerId(null);
-                  }}
-                >
-                  <View style={styles.callout}>
-                    <Text style={styles.calloutName}>
-                      {loc.userinfo?.name ?? "Onbekend"}
-                    </Text>
-
-                    {latestPost ? (
-                      <>
-                        {latestPost.image_url && (
-                          <Image
-                            source={{ uri: latestPost.image_url }}
-                            style={styles.calloutImage}
-                          />
-                        )}
-                        {latestPost.title && (
-                          <Text style={styles.calloutTitle}>
-                            {latestPost.title}
-                          </Text>
-                        )}
-                        {latestPost.description && (
-                          <Text style={styles.calloutDescription}>
-                            {latestPost.description}
-                          </Text>
-                        )}
-                      </>
-                    ) : (
-                      <Text style={styles.calloutDescription}>
-                        Geen recente post
-                      </Text>
+                {true && <>
+                  <View style={styles.friendMarkerContainer}>
+                    {isZoomedIn && (
+                      <View style={styles.friendNameBubble}>
+                        <Text style={styles.friendNameText}>
+                          {loc.userinfo?.name ?? "Unknown"}
+                        </Text>
+                      </View>
                     )}
+                    <View style={styles.friendDotWrapper}>
+                      <View style={styles.friendDot} />
+                    </View>
                   </View>
-                </Callout>
+
+                  <Callout
+                    tooltip={Platform.OS === "ios"}
+                    onPress={() => {
+                      suppressNextMarkerPress.current = true;
+                      markerRefs.current[loc.user_id]?.hideCallout();
+                      setOpenMarkerId(null);
+                    }}
+                  >
+                    <View style={styles.callout}>
+                      <Text style={styles.calloutName}>
+                        {loc.userinfo?.name ?? "Unknown"}
+                      </Text>
+
+                      {latestPost ? (
+                        <>
+                          {latestPost.image_url && (
+                            <Image
+                              source={{ uri: latestPost.image_url }}
+                              style={styles.calloutImage}
+                            />
+                          )}
+                          {latestPost.title && (
+                            <Text style={styles.calloutTitle}>
+                              {latestPost.title}
+                            </Text>
+                          )}
+                          {latestPost.description && (
+                            <Text style={styles.calloutDescription}>
+                              {latestPost.description}
+                            </Text>
+                          )}
+                        </>
+                      ) : (
+                        <Text style={styles.calloutDescription}>
+                          No recent post
+                        </Text>
+                      )}
+                    </View>
+                  </Callout>
+                </>}
               </Marker>
             );
           })}
