@@ -229,8 +229,10 @@ export default function MapScreen() {
                     setOpenMarkerId(loc.user_id);
                   }
                 }}
+                title={Platform.OS === "android" ? loc.userinfo?.name ?? "Unknown" : undefined}
+                description={Platform.OS === "android" && loc.updated_at ? `Last updated: ${dayjs(loc.updated_at).fromNow()}` : undefined}
               >
-                {true && <>
+                {Platform.OS === "ios" && <>
                   <View style={styles.friendMarkerContainer}>
                     {isZoomedIn && (
                       <View style={styles.friendNameBubble}>
